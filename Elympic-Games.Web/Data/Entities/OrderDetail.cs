@@ -2,7 +2,7 @@
 
 namespace Elympic_Games.Web.Data.Entities
 {
-    public class OrderDetail
+    public class OrderDetail : IEntity
     {
         public int Id { get; set; }
 
