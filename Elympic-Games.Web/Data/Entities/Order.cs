@@ -9,13 +9,13 @@ namespace Elympic_Games.Web.Data.Entities
 
         [Required]
         [Display(Name = "Order Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime OrderDate { get; set; }
 
 
         [Required]
         [Display(Name = "Delivery Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime DeliveryDate { get; set; }
 
 
@@ -24,6 +24,10 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         public IEnumerable<OrderDetail> Items { get; set; }
+
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal TotalPrice { get; set; }
 
 
         [DisplayFormat(DataFormatString = "{0:N0}")]
@@ -35,6 +39,6 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        public decimal Value => Items == null ? 0 : Items.Sum(x => x.Value);
+        public decimal TotalPriceView => Items == null ? 0 : Items.Sum(x => x.TotalPriceByDetail);
     }
 }

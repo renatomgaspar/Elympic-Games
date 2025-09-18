@@ -24,12 +24,7 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
-        public string Country { get; set; }
-
-
-        [Required]
-        [Display(Name = "Game Type")]
-        public GameType GameType { get; set; }
+        public Team Team { get; set; }
 
 
         [Required]

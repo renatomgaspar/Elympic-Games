@@ -4,6 +4,7 @@ using Elympic_Games.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Elympic_Games.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250918153431_DatabaseV2.0")]
+    partial class DatabaseV20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,38 +73,11 @@ namespace Elympic_Games.Web.Migrations
                     b.Property<int>("Rank")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("TeamId");
-
                     b.ToTable("Classifications");
-                });
-
-            modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Event", b =>
@@ -216,9 +192,6 @@ namespace Elympic_Games.Web.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -241,14 +214,14 @@ namespace Elympic_Games.Web.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
-
-                    b.Property<decimal>("TotalPriceByDetail")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -269,6 +242,10 @@ namespace Elympic_Games.Web.Migrations
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FírstName")
                         .IsRequired()
@@ -334,8 +311,9 @@ namespace Elympic_Games.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("GameTypeId")
                         .HasColumnType("int");
@@ -349,8 +327,6 @@ namespace Elympic_Games.Web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
 
                     b.HasIndex("GameTypeId");
 
@@ -398,6 +374,9 @@ namespace Elympic_Games.Web.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -407,35 +386,11 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TicketId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("TicketOrders");
-                });
-
-            modelBuilder.Entity("Elympic_Games.Web.Data.Entities.TicketOrderDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TicketOrderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TicketId");
-
-                    b.HasIndex("TicketOrderId");
-
-                    b.ToTable("TicketOrderDetail");
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.User", b =>
@@ -652,15 +607,7 @@ namespace Elympic_Games.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Elympic_Games.Web.Data.Entities.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Event");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Event", b =>
@@ -757,12 +704,6 @@ namespace Elympic_Games.Web.Migrations
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Team", b =>
                 {
-                    b.HasOne("Elympic_Games.Web.Data.Entities.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Elympic_Games.Web.Data.Entities.GameType", "GameType")
                         .WithMany()
                         .HasForeignKey("GameTypeId")
@@ -774,8 +715,6 @@ namespace Elympic_Games.Web.Migrations
                         .HasForeignKey("TeamManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Country");
 
                     b.Navigation("GameType");
 
@@ -795,28 +734,21 @@ namespace Elympic_Games.Web.Migrations
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.TicketOrder", b =>
                 {
-                    b.HasOne("Elympic_Games.Web.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Elympic_Games.Web.Data.Entities.TicketOrderDetail", b =>
-                {
                     b.HasOne("Elympic_Games.Web.Data.Entities.Ticket", "Ticket")
                         .WithMany()
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Elympic_Games.Web.Data.Entities.TicketOrder", null)
-                        .WithMany("Items")
-                        .HasForeignKey("TicketOrderId");
+                    b.HasOne("Elympic_Games.Web.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Ticket");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -871,11 +803,6 @@ namespace Elympic_Games.Web.Migrations
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Order", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Elympic_Games.Web.Data.Entities.TicketOrder", b =>
                 {
                     b.Navigation("Items");
                 });

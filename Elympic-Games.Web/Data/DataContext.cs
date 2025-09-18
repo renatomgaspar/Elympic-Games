@@ -19,7 +19,22 @@ namespace Elympic_Games.Web.Data
 
         public DbSet<Team> Teams { get; set; }
 
+        public DbSet<Country> Countries { get; set; }
+
         public DbSet<GameType> GameTypes { get; set; }
+
+        public DbSet<Match> Matches { get; set; }
+
+        public DbSet<Event> Events { get; set; }
+
+        public DbSet<Classification> Classifications { get; set; }
+
+        public DbSet<Arena> Arena { get; set; }
+
+        public DbSet<Ticket> Tickets { get; set; }
+
+        public DbSet<TicketOrder> TicketOrders { get; set; }
+
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -32,11 +47,36 @@ namespace Elympic_Games.Web.Data
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");
 
-
             modelBuilder.Entity<OrderDetail>()
-              .Property(p => p.Price)
+              .Property(o => o.TotalPriceByDetail)
               .HasColumnType("decimal(18,2)");
 
+            modelBuilder.Entity<Order>()
+              .Property(o => o.TotalPrice)
+              .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Ticket>()
+              .Property(t => t.Price)
+              .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<TicketOrder>()
+              .Property(t => t.TotalPrice)
+              .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Match>()
+                .HasOne(m => m.TeamOne)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Match>()
+                .HasOne(m => m.TeamTwo)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Player>()
+                .HasOne(p => p.Team)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

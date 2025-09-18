@@ -2,7 +2,7 @@
 
 namespace Elympic_Games.Web.Data.Entities
 {
-    public class GameType
+    public class GameType : IEntity
     {
         public int Id { get; set; }
 
