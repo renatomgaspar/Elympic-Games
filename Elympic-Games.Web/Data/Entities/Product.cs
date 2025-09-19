@@ -20,14 +20,12 @@ namespace Elympic_Games.Web.Data.Entities
         public DateTime? LastSale { get; set; }
 
 
+        [Required]
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = false)]
         public double Stock { get; set; }
 
 
         [Display(Name = "Is Available")]
         public bool IsAvailable { get; set; }
-
-
-        public User User { get; set; }
     }
 }

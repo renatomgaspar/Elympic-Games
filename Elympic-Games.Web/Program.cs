@@ -11,6 +11,8 @@ builder.Services.AddDbContext<DataContext>(cfg =>
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
