@@ -6,7 +6,6 @@ namespace Elympic_Games.Web.Data.Entities
     {
         public int Id { get; set; }
 
-
         [Required]
         [MaxLength(50, ErrorMessage = "The field {0} can contain {1} characters length.")]
         public string Name { get; set; }
@@ -27,5 +26,13 @@ namespace Elympic_Games.Web.Data.Entities
 
         [Display(Name = "Is Available")]
         public bool IsAvailable { get; set; }
+
+
+        [Display(Name = "Image")]
+        public Guid ImageId { get; set; }
+
+        public string ImageFullPath => ImageId == Guid.Empty
+            ? $"https://localhost:44387/images/noimage.png"
+            : $"https://elympicgames.blob.core.windows.net/products/{ImageId}";
     }
 }

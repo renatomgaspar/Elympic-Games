@@ -1,0 +1,12 @@
+﻿using Elympic_Games.Web.Data.Entities;
+using Elympic_Games.Web.Models;
+
+namespace Elympic_Games.Web.Helpers
+{
+    public interface IConverterHelper
+    {
+        Product ToProduct(ProductViewModel model, Guid imageId, bool isNew);
+
+        ProductViewModel ToProductViewModel(Product product);
+    }
+}

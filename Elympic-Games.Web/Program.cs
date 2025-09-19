@@ -1,4 +1,5 @@
 using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<DataContext>(cfg =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IBlobHelper, BlobHelper>();
+builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 
 var app = builder.Build();
 
