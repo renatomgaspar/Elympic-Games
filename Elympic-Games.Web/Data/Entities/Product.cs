@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace Elympic_Games.Web.Data.Entities
 {
@@ -20,7 +21,6 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = false)]
         public double Stock { get; set; }
 
 
@@ -30,6 +30,10 @@ namespace Elympic_Games.Web.Data.Entities
 
         [Display(Name = "Image")]
         public Guid ImageId { get; set; }
+
+
+        [BindNever]
+        public User User { get; set; }
 
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://localhost:44387/images/noimage.png"

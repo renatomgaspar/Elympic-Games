@@ -15,7 +15,8 @@ namespace Elympic_Games.Web.Helpers
                 Name = model.Name,
                 Price = model.Price,
                 Stock = model.Stock,
-                ImageId = imageId
+                ImageId = imageId,
+                User = model.User
             };
         }
 
@@ -29,7 +30,8 @@ namespace Elympic_Games.Web.Helpers
                 Name = product.Name,
                 Price = product.Price,
                 Stock = product.Stock,
-                ImageId = product.ImageId
+                ImageId = product.ImageId,
+                User = product.User
             };
         }
     }

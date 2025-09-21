@@ -5,21 +5,25 @@ using Elympic_Games.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Elympic_Games.Web.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
+        private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
         
         public ProductController(
             IProductRepository productRepository,
+            IUserHelper userHelper,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper)
         {
             _productRepository = productRepository;
+            _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
         }
@@ -27,7 +31,7 @@ namespace Elympic_Games.Web.Controllers
         // GET: Products
         public IActionResult Index()
         {
-            return View(_productRepository.GetAll());
+            return View(_productRepository.GetAll().OrderBy(p => p.Name));
         }
 
         // GET: Products/Details/5
@@ -69,7 +73,8 @@ namespace Elympic_Games.Web.Controllers
 
                 var product = _converterHelper.ToProduct(model, imageId, true);
 
-                //TODO: Modificar para adicionar user
+                //TODO: Modificar para o user que tiver logado
+                product.User = await _userHelper.GetUserByEmailAsync("elympicgames_manager@gmail.com");
                 await _productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
@@ -99,6 +104,18 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ProductViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                foreach (var state in ModelState)
+                {
+                    var key = state.Key; // nome do campo
+                    foreach (var error in state.Value.Errors)
+                    {
+                        Debug.WriteLine($"Campo inválido: {key}, Erro: {error.ErrorMessage}");
+                    }
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -113,6 +130,7 @@ namespace Elympic_Games.Web.Controllers
                     var product = _converterHelper.ToProduct(model, imageId, false);
 
                     //TODO: Modificar para o user que tiver logado
+                    product.User = await _userHelper.GetUserByEmailAsync("elympicgames_manager@gmail.com");
                     await _productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
