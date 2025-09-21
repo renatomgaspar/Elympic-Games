@@ -14,7 +14,8 @@ namespace Elympic_Games.Web.Migrations
                 name: "UserId",
                 table: "Products",
                 type: "nvarchar(450)",
-                nullable: true);
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_UserId",
@@ -26,7 +27,8 @@ namespace Elympic_Games.Web.Migrations
                 table: "Products",
                 column: "UserId",
                 principalTable: "AspNetUsers",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />

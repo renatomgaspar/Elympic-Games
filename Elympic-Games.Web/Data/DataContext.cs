@@ -43,6 +43,12 @@ namespace Elympic_Games.Web.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Product must have an User
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.User)
+                .WithMany()
+                .IsRequired();
+
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Elympic_Games.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250921163059_AddUserToProduct")]
+    [Migration("20250921222633_AddUserToProduct")]
     partial class AddUserToProduct
     {
         /// <inheritdoc />
@@ -323,6 +323,7 @@ namespace Elympic_Games.Web.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -756,7 +757,9 @@ namespace Elympic_Games.Web.Migrations
                 {
                     b.HasOne("Elympic_Games.Web.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

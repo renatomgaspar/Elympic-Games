@@ -32,8 +32,7 @@ namespace Elympic_Games.Web.Data.Entities
         public Guid ImageId { get; set; }
 
 
-        [BindNever]
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://localhost:44387/images/noimage.png"

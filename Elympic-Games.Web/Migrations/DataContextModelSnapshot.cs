@@ -320,6 +320,7 @@ namespace Elympic_Games.Web.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -753,7 +754,9 @@ namespace Elympic_Games.Web.Migrations
                 {
                     b.HasOne("Elympic_Games.Web.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
