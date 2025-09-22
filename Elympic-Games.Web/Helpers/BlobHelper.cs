@@ -40,5 +40,17 @@ namespace Elympic_Games.Web.Helpers
             await blockBlob.UploadFromStreamAsync(stream);
             return name;
         }
+
+        public async Task DeleteBlobAsync(Guid? imageId, string containerName)
+        {
+            if (imageId == Guid.Empty)
+            {
+                return;
+            }
+
+            CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{imageId}");
+            await blockBlob.DeleteIfExistsAsync();
+        }
     }
 }

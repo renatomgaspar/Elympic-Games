@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -110,6 +111,7 @@ namespace Elympic_Games.Web.Controllers
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
+                        await _blobHelper.DeleteBlobAsync(model.ImageId, "products");
                         imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
                     }
 

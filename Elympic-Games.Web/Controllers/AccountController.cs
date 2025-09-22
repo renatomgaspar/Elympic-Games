@@ -143,13 +143,14 @@ namespace Elympic_Games.Web.Controllers
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
+                        await _blobHelper.DeleteBlobAsync(user.ImageId, "users");
                         imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
                         user.ImageId = imageId;
-                        model.ImageId = imageId;
                     }
 
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
+                    model.ImageId = user.ImageId;
                     var response = await _userHelper.UpdateUserAsync(user);
                     if (response.Succeeded)
                     {
