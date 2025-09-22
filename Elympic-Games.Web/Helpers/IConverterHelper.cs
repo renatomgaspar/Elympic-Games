@@ -8,5 +8,9 @@ namespace Elympic_Games.Web.Helpers
         Product ToProduct(ProductViewModel model, Guid imageId, bool isNew);
 
         ProductViewModel ToProductViewModel(Product product);
+
+        User ToUser(RegisterNewUserViewModel model, Guid imageId, bool isNew);
+
+        RegisterNewUserViewModel ToRegisterNewUserViewModel(User user);
     }
 }

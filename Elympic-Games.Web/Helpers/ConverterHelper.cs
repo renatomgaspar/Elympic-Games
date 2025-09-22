@@ -34,5 +34,29 @@ namespace Elympic_Games.Web.Helpers
                 User = product.User
             };
         }
+
+        public User ToUser(RegisterNewUserViewModel model, Guid imageId, bool isNew)
+        {
+            return new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                ImageId = imageId
+            };
+        }
+
+        public RegisterNewUserViewModel ToRegisterNewUserViewModel(User user)
+        {
+            return new RegisterNewUserViewModel
+            {
+                UserName = user.Email,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ImageFile = null
+            };
+        }
     }
 }

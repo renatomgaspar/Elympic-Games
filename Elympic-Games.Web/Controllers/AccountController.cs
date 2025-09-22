@@ -1,16 +1,28 @@
-﻿using Elympic_Games.Web.Helpers;
+﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
+using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Elympic_Games.Web.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public AccountController(IUserHelper userHelper)
+        public AccountController(
+            IUserHelper userHelper,
+            IBlobHelper blobHelper,
+            IConverterHelper converterHelper
+            )
         {
             _userHelper = userHelper;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
         }
 
         public IActionResult Login()
@@ -48,6 +60,60 @@ namespace Elympic_Games.Web.Controllers
         {
             await _userHelper.LogoutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterNewUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    Guid imageId = Guid.Empty;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    }
+
+                    user = _converterHelper.ToUser(model, imageId, true);
+
+                    var result = await _userHelper.AddUserAsync(user, model.Password);
+                    if (result != IdentityResult.Success)
+                    {
+                        ModelState.AddModelError(string.Empty, "The user couldn't be created.");
+                        return View(model);
+                    }
+
+                    var loginViewModel = new LoginViewModel
+                    {
+                        Password = model.Password,
+                        RememberMe = false,
+                        Email = model.Email
+                    };
+
+                    var result2 = await _userHelper.LoginAsync(loginViewModel);
+                    if (result2.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    ModelState.AddModelError(string.Empty, "The user couldn't be logged");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "The Email typed is already registered!");
+                }
+            }
+
+            return View(model);
         }
     }
 }
