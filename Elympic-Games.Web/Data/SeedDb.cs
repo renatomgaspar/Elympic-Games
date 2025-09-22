@@ -24,6 +24,9 @@ namespace Elympic_Games.Web.Data
         {
             await _context.Database.MigrateAsync();
 
+            await _userHelper.CheckRoleAsync("Admin");
+            await _userHelper.CheckRoleAsync("Client");
+
             var user = await _userHelper.GetUserByEmailAsync("elympicgames_manager@gmail.com");
 
             if (user == null)
@@ -42,6 +45,14 @@ namespace Elympic_Games.Web.Data
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");
                 }
+
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
+            }
+
+            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
+            if (!isInRole)
+            {
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
 
             if (!_context.Products.Any())

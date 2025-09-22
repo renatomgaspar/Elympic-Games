@@ -10,6 +10,8 @@ namespace Elympic_Games.Web.Helpers
 
         Task<IdentityResult> AddUserAsync(User user, string password);
 
+        Task AddUserToRoleAsync(User user, string roleName);
+
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
         Task LogoutAsync();
@@ -17,5 +19,9 @@ namespace Elympic_Games.Web.Helpers
         Task<IdentityResult> UpdateUserAsync(User user);
 
         Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
+
+        Task CheckRoleAsync(string roleName);
+
+        Task<bool> IsUserInRoleAsync(User user, string roleName);
     }
 }

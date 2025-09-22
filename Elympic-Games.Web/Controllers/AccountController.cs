@@ -92,6 +92,10 @@ namespace Elympic_Games.Web.Controllers
                         return View(model);
                     }
 
+                    var roleName = "Client";
+                    await _userHelper.CheckRoleAsync(roleName);
+                    await _userHelper.AddUserToRoleAsync(user, roleName);
+
                     var loginViewModel = new LoginViewModel
                     {
                         Password = model.Password,

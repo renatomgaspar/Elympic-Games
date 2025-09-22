@@ -29,6 +29,7 @@ namespace Elympic_Games.Web.Controllers
 
         // GET: Products
         [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View(_productRepository.GetAll().OrderBy(p => p.Name));
