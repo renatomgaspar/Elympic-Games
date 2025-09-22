@@ -1,5 +1,4 @@
 ﻿using Elympic_Games.Web.Data;
-using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -27,10 +26,15 @@ namespace Elympic_Games.Web.Controllers
             _converterHelper = converterHelper;
         }
 
+        public IActionResult Index()
+        {
+            return View(_productRepository.GetAll().OrderBy(p => p.Name));
+        }
+
         // GET: Products
         [Authorize]
         [Authorize(Roles = "Admin")]
-        public IActionResult Index()
+        public IActionResult Manage()
         {
             return View(_productRepository.GetAll().OrderBy(p => p.Name));
         }
@@ -76,7 +80,7 @@ namespace Elympic_Games.Web.Controllers
 
                 product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _productRepository.CreateAsync(product);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             return View(model);
         }
@@ -132,7 +136,7 @@ namespace Elympic_Games.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Manage));
             }
             return View(model);
         }
@@ -161,7 +165,7 @@ namespace Elympic_Games.Web.Controllers
         {
             var product = await _productRepository.GetByIdAsync(id); ;
             await _productRepository.DeleteAsync(product);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Manage));
         }
     }
 }
