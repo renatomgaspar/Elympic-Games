@@ -1,5 +1,5 @@
 ﻿using Elympic_Games.Web.Data.Entities;
-using Elympic_Games.Web.Models;
+using Elympic_Games.Web.Models.Accounts;
 using Microsoft.AspNetCore.Identity;
 
 namespace Elympic_Games.Web.Helpers
@@ -17,15 +17,15 @@ namespace Elympic_Games.Web.Helpers
             _signInManager = signInManager;
         }
 
-        public async Task<IdentityResult> AddUserAsync(User user, string password)
-        {
-            return await _userManager.CreateAsync(user, password);
-        }
-
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
         }
+
+        public async Task<IdentityResult> AddUserAsync(User user, string password)
+        {
+            return await _userManager.CreateAsync(user, password);
+        }      
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
@@ -39,6 +39,19 @@ namespace Elympic_Games.Web.Helpers
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(
+            User user,
+            string oldPassword,
+            string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
     }
 }

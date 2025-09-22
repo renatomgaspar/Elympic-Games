@@ -1,7 +1,7 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Elympic_Games.Web.Models
+namespace Elympic_Games.Web.Models.Products
 {
     public class ProductViewModel : Product
     {

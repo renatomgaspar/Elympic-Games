@@ -1,11 +1,9 @@
 ﻿using Elympic_Games.Web.Data;
-using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
-using Elympic_Games.Web.Models;
-using Microsoft.AspNetCore.Http;
+using Elympic_Games.Web.Models.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace Elympic_Games.Web.Controllers
 {
@@ -15,7 +13,7 @@ namespace Elympic_Games.Web.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
-        
+
         public ProductController(
             IProductRepository productRepository,
             IUserHelper userHelper,
@@ -29,6 +27,7 @@ namespace Elympic_Games.Web.Controllers
         }
 
         // GET: Products
+        [Authorize]
         public IActionResult Index()
         {
             return View(_productRepository.GetAll().OrderBy(p => p.Name));

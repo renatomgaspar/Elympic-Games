@@ -1,5 +1,6 @@
 ﻿using Elympic_Games.Web.Data.Entities;
-using Elympic_Games.Web.Models;
+using Elympic_Games.Web.Models.Accounts;
+using Elympic_Games.Web.Models.Products;
 
 namespace Elympic_Games.Web.Helpers
 {

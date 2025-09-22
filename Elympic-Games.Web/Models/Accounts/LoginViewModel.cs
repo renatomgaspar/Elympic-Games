@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Elympic_Games.Web.Models
+namespace Elympic_Games.Web.Models.Accounts
 {
     public class LoginViewModel
     {

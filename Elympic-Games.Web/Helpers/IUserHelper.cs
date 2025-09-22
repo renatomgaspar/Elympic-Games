@@ -1,5 +1,5 @@
 ﻿using Elympic_Games.Web.Data.Entities;
-using Elympic_Games.Web.Models;
+using Elympic_Games.Web.Models.Accounts;
 using Microsoft.AspNetCore.Identity;
 
 namespace Elympic_Games.Web.Helpers
@@ -13,5 +13,9 @@ namespace Elympic_Games.Web.Helpers
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
         Task LogoutAsync();
+
+        Task<IdentityResult> UpdateUserAsync(User user);
+
+        Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
     }
 }

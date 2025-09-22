@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Elympic_Games.Web.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Elympic_Games.Web.Data.Entities
+namespace Elympic_Games.Web.Models.Accounts
 {
-    public class User : IdentityUser
+    public class ChangeUserViewModel
     {
         [Required]
-        [Display(Name = "First Name*")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
 
         [Required]
-        [Display(Name = "Last Names*")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
 
-        [Display(Name = "Image")]
         public Guid? ImageId { get; set; }
 
 
-        [Display(Name = "Full Name")]
-        public string FullName => $"{FirstName} {LastName}";
+        [Display(Name = "Image")]
+        public IFormFile? ImageFile { get; set; }
 
 
         public string ImageFullPath => ImageId == Guid.Empty
