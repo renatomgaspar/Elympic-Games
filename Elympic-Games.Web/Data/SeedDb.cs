@@ -25,6 +25,7 @@ namespace Elympic_Games.Web.Data
             await _context.Database.MigrateAsync();
 
             await _userHelper.CheckRoleAsync("Admin");
+            await _userHelper.CheckRoleAsync("Team Manager");
             await _userHelper.CheckRoleAsync("Client");
 
             var user = await _userHelper.GetUserByEmailAsync("elympicgames_manager@gmail.com");
@@ -37,7 +38,8 @@ namespace Elympic_Games.Web.Data
                     LastName = "Games",
                     Email = "elympicgames_manager@gmail.com",
                     UserName = "elympicgames_manager@gmail.com",
-                    PhoneNumber = "911111111"
+                    PhoneNumber = "911111111",
+                    ImageId = Guid.Empty
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");

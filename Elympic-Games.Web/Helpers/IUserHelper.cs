@@ -1,11 +1,17 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace Elympic_Games.Web.Helpers
 {
     public interface IUserHelper
     {
+        Task<List<User>> GetAllAsync();
+
+        Task<User> GetUserById(string id);
+
         Task<User> GetUserByEmailAsync(string email);
 
         Task<IdentityResult> AddUserAsync(User user, string password);
@@ -18,10 +24,14 @@ namespace Elympic_Games.Web.Helpers
 
         Task<IdentityResult> UpdateUserAsync(User user);
 
+        Task<IdentityResult> DeleteUserAsync(string id);
+
         Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
 
         Task CheckRoleAsync(string roleName);
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        IEnumerable<SelectListItem> GetComboRoles();
     }
 }

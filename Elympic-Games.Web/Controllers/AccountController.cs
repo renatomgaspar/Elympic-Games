@@ -2,6 +2,7 @@
 using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Accounts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -23,6 +24,98 @@ namespace Elympic_Games.Web.Controllers
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Manage()
+        {
+            return View(await _userHelper.GetAllAsync());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Details(string id)
+        {
+            var user = await _userHelper.GetUserById(id);
+
+            if (user == null)
+            {
+                this.ModelState.AddModelError(string.Empty, "User not found.");
+            }
+
+            return View(user);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await _userHelper.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = await _userHelper.GetUserById(user.Id);
+                if (existingUser != null)
+                {
+                    existingUser.FirstName = user.FirstName;
+                    existingUser.LastName = user.LastName;
+                    existingUser.Email = user.Email;
+                    existingUser.UserName = user.Email;
+
+                    var result = await _userHelper.UpdateUserAsync(existingUser);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Manage));
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+
+            return View(user);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userHelper.GetUserById(id);
+            await _userHelper.DeleteUserAsync(id);
+            return RedirectToAction(nameof(Manage));
         }
 
         public IActionResult Login()
@@ -64,12 +157,23 @@ namespace Elympic_Games.Web.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            var model = new RegisterNewUserViewModel
+            {
+                Roles = _userHelper.GetComboRoles().ToList()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
+            if (model.Role == null)
+            {
+                model.Role = "Client";
+            }
+
+
             if (ModelState.IsValid)
             {
                 var user = await _userHelper.GetUserByEmailAsync(model.Email);
@@ -86,30 +190,16 @@ namespace Elympic_Games.Web.Controllers
                     user = _converterHelper.ToUser(model, imageId, true);
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
-                    if (result != IdentityResult.Success)
+                    if (!result.Succeeded)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
                         return View(model);
                     }
 
-                    var roleName = "Client";
-                    await _userHelper.CheckRoleAsync(roleName);
-                    await _userHelper.AddUserToRoleAsync(user, roleName);
+                    await _userHelper.CheckRoleAsync(model.Role);
+                    await _userHelper.AddUserToRoleAsync(user, model.Role);
 
-                    var loginViewModel = new LoginViewModel
-                    {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Email = model.Email
-                    };
-
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
-                    if (result2.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                    ModelState.AddModelError(string.Empty, "The user couldn't be logged");
+                    TempData["SuccessMessage"] = "User created successfully!";
                 }
                 else
                 {
@@ -117,6 +207,7 @@ namespace Elympic_Games.Web.Controllers
                 }
             }
 
+            model.Roles = _userHelper.GetComboRoles();
             return View(model);
         }
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Elympic_Games.Web.Models.Accounts
 {
@@ -19,6 +21,10 @@ namespace Elympic_Games.Web.Models.Accounts
         public string Email { get; set; }
 
 
+        [Display(Name = "Role")]
+        public string? Role { get; set; }
+
+
         [Display(Name = "UserName*")]
         public string? UserName { get; set; }
 
@@ -34,5 +40,9 @@ namespace Elympic_Games.Web.Models.Accounts
 
         [Display(Name = "Image")]
         public IFormFile? ImageFile { get; set; }
+
+
+        [BindNever]
+        public IEnumerable<SelectListItem>? Roles { get; set; }
     }
 }

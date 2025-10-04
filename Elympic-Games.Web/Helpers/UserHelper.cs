@@ -1,6 +1,8 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Elympic_Games.Web.Helpers
 {
@@ -18,6 +20,16 @@ namespace Elympic_Games.Web.Helpers
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+        }
+
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+
+        public async Task<User> GetUserById(string id)
+        {
+            return await _userManager.FindByIdAsync(id);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -51,7 +63,28 @@ namespace Elympic_Games.Web.Helpers
 
         public async Task<IdentityResult> UpdateUserAsync(User user)
         {
-            return await _userManager.UpdateAsync(user);
+            var existingUser = await _userManager.FindByIdAsync(user.Id);
+
+            if (existingUser.Email != user.Email)
+            {
+                if (await _userManager.FindByEmailAsync(user.Email) == null)
+                {
+                    existingUser.Email = user.Email;
+                    existingUser.UserName = user.Email;
+                }
+            }
+
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+
+            return await _userManager.UpdateAsync(existingUser);
+        }
+
+        public async Task<IdentityResult> DeleteUserAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            return await _userManager.DeleteAsync(user);
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(
@@ -77,6 +110,26 @@ namespace Elympic_Games.Web.Helpers
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {
             return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public IEnumerable<SelectListItem> GetComboRoles()
+        {
+            var list = _roleManager.Roles
+                .Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Name
+                })
+                .OrderBy(r => r.Text)
+                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "Select a role...",
+                Value = string.Empty
+            });
+
+            return list;
         }
     }
 }
