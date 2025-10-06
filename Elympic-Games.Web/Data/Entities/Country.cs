@@ -8,12 +8,22 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
-        [Display(Name = "Country Name")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
 
-        [Display(Name = "Country Code")]
+        [Required]
+        [Display(Name = "Code")]
         [MaxLength(3)]
         public string Code { get; set; }
+
+
+        [Display(Name = "Flag")]
+        public Guid ImageId { get; set; }
+
+
+        public string ImageFullPath => ImageId == Guid.Empty
+            ? $"https://localhost:44387/images/noimage.png"
+            : $"https://elympicgames.blob.core.windows.net/countries/{ImageId}";
     }
 }

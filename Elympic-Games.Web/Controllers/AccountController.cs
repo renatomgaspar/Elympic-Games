@@ -114,6 +114,12 @@ namespace Elympic_Games.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var user = await _userHelper.GetUserById(id);
+
+            if (user.ImageId != Guid.Empty)
+            {
+                await _blobHelper.DeleteBlobAsync(user.ImageId, "users");
+            }
+
             await _userHelper.DeleteUserAsync(id);
             return RedirectToAction(nameof(Manage));
         }

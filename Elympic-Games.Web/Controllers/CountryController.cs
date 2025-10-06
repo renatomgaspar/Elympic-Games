@@ -1,6 +1,7 @@
 ﻿using Elympic_Games.Web.Data;
 using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
+using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,39 +9,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Elympic_Games.Web.Controllers
 {
-    public class ProductController : Controller
+    public class CountryController : Controller
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IUserHelper _userHelper;
+        private readonly ICountryRepository _countryRepository;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
-        public ProductController(
-            IProductRepository productRepository,
-            IUserHelper userHelper,
+        public CountryController(
+            ICountryRepository countryRepository,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper)
         {
-            _productRepository = productRepository;
-            _userHelper = userHelper;
+            _countryRepository = countryRepository;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
         }
 
         public IActionResult Index()
         {
-            return View(_productRepository.GetAll().OrderBy(p => p.Name));
+            return View();
         }
 
-        // GET: Products
         [Authorize]
         [Authorize(Roles = "Admin")]
         public IActionResult Manage()
         {
-            return View(_productRepository.GetAll().OrderBy(p => p.Name));
+            return View(_countryRepository.GetAll().OrderBy(c => c.Name));
         }
 
-        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,46 +44,50 @@ namespace Elympic_Games.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _productRepository.GetByIdAsync(id.Value);
-            if (product == null)
+            var country = await _countryRepository.GetByIdAsync(id.Value);
+            if (country == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(country);
         }
 
-        // GET: Products/Create
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductViewModel model)
+        public async Task<IActionResult> Create(CountryViewModel model)
         {
             if (ModelState.IsValid)
             {
+                model.Code = model.Code.ToUpper();
+
                 Guid imageId = Guid.Empty;
 
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "countries");
                 }
 
-                var product = _converterHelper.ToProduct(model, imageId, true);
+                var country = _converterHelper.ToCountry(model, imageId, true);
 
-                product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-                await _productRepository.CreateAsync(product);
+                if (await _countryRepository.CountryExistsByCode(model.Code) != null)
+                {
+                    ModelState.AddModelError("Code", "This code is already in use.");
+                    return View(model);
+                }
+
+                await _countryRepository.CreateAsync(country);
                 return RedirectToAction(nameof(Manage));
             }
             return View(model);
         }
 
-        // GET: Products/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -96,41 +96,48 @@ namespace Elympic_Games.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _productRepository.GetByIdAsync(id.Value);
-            if (product == null)
+            var country = await _countryRepository.GetByIdAsync(id.Value);
+            if (country == null)
             {
                 return NotFound();
             }
 
-            var model = _converterHelper.ToProductViewModel(product);
+            var model = _converterHelper.ToCountryViewModel(country);
             return View(model);
         }
 
-        // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ProductViewModel model)
+        public async Task<IActionResult> Edit(CountryViewModel model)
         {
             if (ModelState.IsValid)
             {
+                model.Code = model.Code.ToUpper();  
+
                 try
                 {
                     Guid imageId = model.ImageId;
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-                        await _blobHelper.DeleteBlobAsync(model.ImageId, "products");
-                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
+                        await _blobHelper.DeleteBlobAsync(model.ImageId, "countries");
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "countries");
                     }
 
-                    var product = _converterHelper.ToProduct(model, imageId, false);
+                    var existingCountry = await _countryRepository.CountryExistsByCode(model.Code);
+                    if (existingCountry != null && existingCountry.Id != model.Id)
+                    {
+                        ModelState.AddModelError("Code", "This code is already in use.");
+                        return View(model);
+                    }
 
-                    product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-                    await _productRepository.UpdateAsync(product);
+                    var country = _converterHelper.ToCountry(model, imageId, false);
+
+                    await _countryRepository.UpdateAsync(country);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _productRepository.ExistAsync(model.Id))
+                    if (!await _countryRepository.ExistAsync(model.Id))
                     {
                         return NotFound();
                     }
@@ -139,12 +146,13 @@ namespace Elympic_Games.Web.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Manage));
             }
+
             return View(model);
         }
 
-        // GET: Products/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -153,28 +161,27 @@ namespace Elympic_Games.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _productRepository.GetByIdAsync(id.Value);
-            if (product == null)
+            var country = await _countryRepository.GetByIdAsync(id.Value);
+            if (country == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(country);
         }
 
-        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _productRepository.GetByIdAsync(id);
+            var country = await _countryRepository.GetByIdAsync(id); ;
 
-            if (product.ImageId != Guid.Empty)
+            if (country.ImageId != Guid.Empty)
             {
-                await _blobHelper.DeleteBlobAsync(product.ImageId, "products");
+                await _blobHelper.DeleteBlobAsync(country.ImageId, "countries");
             }
-            
-            await _productRepository.DeleteAsync(product);
+
+            await _countryRepository.DeleteAsync(country);
             return RedirectToAction(nameof(Manage));
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
+using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Products;
 
 namespace Elympic_Games.Web.Helpers
@@ -56,6 +57,29 @@ namespace Elympic_Games.Web.Helpers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                ImageFile = null
+            };
+        }
+
+        public Country ToCountry(CountryViewModel model, Guid imageId, bool isNew)
+        {
+            return new Country
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Code = model.Code,
+                ImageId = imageId
+            };
+        }
+
+        public CountryViewModel ToCountryViewModel(Country country)
+        {
+            return new CountryViewModel
+            {
+                Id = country.Id,
+                Name = country.Name,
+                Code = country.Code,
+                ImageId = country.ImageId,
                 ImageFile = null
             };
         }
