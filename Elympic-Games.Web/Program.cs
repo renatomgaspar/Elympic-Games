@@ -30,6 +30,7 @@ builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IGametypeRepository, GametypeRepository>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 

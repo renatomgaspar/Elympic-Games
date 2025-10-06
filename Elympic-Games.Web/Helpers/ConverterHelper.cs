@@ -1,6 +1,7 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
 using Elympic_Games.Web.Models.Countries;
+using Elympic_Games.Web.Models.Gametypes;
 using Elympic_Games.Web.Models.Products;
 
 namespace Elympic_Games.Web.Helpers
@@ -80,6 +81,31 @@ namespace Elympic_Games.Web.Helpers
                 Name = country.Name,
                 Code = country.Code,
                 ImageId = country.ImageId,
+                ImageFile = null
+            };
+        }
+
+        public GameType ToGametype(GametypeViewModel model, Guid imageId, bool isNew)
+        {
+            return new GameType
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                TeamSize = model.TeamSize,
+                ActivePlayerNo = model.ActivePlayerNo,
+                ImageId = imageId
+            };
+        }
+
+        public GametypeViewModel ToGametypeViewModel(GameType gametype)
+        {
+            return new GametypeViewModel
+            {
+                Id = gametype.Id,
+                Name = gametype.Name,
+                TeamSize = gametype.TeamSize,
+                ActivePlayerNo = gametype.ActivePlayerNo,
+                ImageId = gametype.ImageId,
                 ImageFile = null
             };
         }

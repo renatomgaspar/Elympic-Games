@@ -12,12 +12,23 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
+        [Range(1, 10, ErrorMessage = "Team size must be between 1 and 10.")]
         [Display(Name = "Team Size")]
         public int TeamSize { get; set; }
 
 
         [Required]
-        [Display(Name = "Number of Players in Play")]
-        public int ActivePlayerNo { get; set; } 
+        [Range(1, 7, ErrorMessage = "Number of active players must be between 1 and 6.")]
+        [Display(Name = "Number of Active Players")]
+        public int ActivePlayerNo { get; set; }
+
+
+        [Display(Name = "Game Image")]
+        public Guid ImageId { get; set; }
+
+
+        public string ImageFullPath => ImageId == Guid.Empty
+            ? $"https://localhost:44387/images/noimage.png"
+            : $"https://elympicgames.blob.core.windows.net/gametypes/{ImageId}";
     }
 }

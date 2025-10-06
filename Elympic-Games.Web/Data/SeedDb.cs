@@ -66,6 +66,22 @@ namespace Elympic_Games.Web.Data
 
                 await _context.SaveChangesAsync();
             }
+
+            if (!_context.Countries.Any())
+            {
+                AddCountry("PT", "Portugal");
+                AddCountry("FR", "France");
+                AddCountry("SA", "Saudi Arabia");
+                AddCountry("USA", "United States of America");
+            }
+
+            if (!_context.GameTypes.Any())
+            {
+                AddGametype("Rocket League", 5, 3);
+                AddGametype("League of Legends", 8, 5);
+                AddGametype("Counter-Strike 2", 8, 5);
+                AddGametype("Apex Legends", 5, 3);
+            }
         }
 
         private void AddProduct(string name, User user)
@@ -77,6 +93,27 @@ namespace Elympic_Games.Web.Data
                 IsAvailable = true,
                 Stock = _random.Next(100),
                 User = user
+            });
+        }
+
+        private void AddCountry(string code, string name)
+        {
+            _context.Countries.Add(new Country
+            {
+                Code = code,
+                Name = name,
+                ImageId = Guid.Empty
+            });
+        }
+
+        private void AddGametype(string name, int teamSize, int activePlayers)
+        {
+            _context.GameTypes.Add(new GameType
+            {
+                Name = name,
+                TeamSize = teamSize,
+                ActivePlayerNo = activePlayers,
+                ImageId = Guid.Empty
             });
         }
     }

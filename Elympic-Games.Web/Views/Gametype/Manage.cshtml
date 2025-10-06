@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Elympic_Games.Web.Data.Entities.GameType>
+
+@{
+    ViewData["Title"] = "Manage Games";
+}
+
+<h1 class="mb-3">Manage Games</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivePlayerNo)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageFullPath))
+                    {
+                        <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:170px;height:220px;max-width:100%;height:auto">
+                    }
+                </td>
+                <td class="w-40">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeamSize)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivePlayerNo)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
