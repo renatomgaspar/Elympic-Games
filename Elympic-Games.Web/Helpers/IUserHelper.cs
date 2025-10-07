@@ -32,6 +32,8 @@ namespace Elympic_Games.Web.Helpers
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
 
+        Task<IEnumerable<SelectListItem>> GetUsersInRoleAsync(string role);
+
         IEnumerable<SelectListItem> GetComboRoles();
     }
 }

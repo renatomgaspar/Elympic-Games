@@ -12,16 +12,19 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
+        public int CountryId { get; set; }
+
         public Country Country { get; set; }
 
 
         [Required]
-        [Display(Name = "Game")]
+        public int GameTypeId { get; set; }
         public GameType GameType { get; set; }
 
 
         [Required]
-        [Display(Name = "Team Manager")]
+        public string TeamManagerId { get; set; }
+
         public User TeamManager { get; set; }
     }
 }

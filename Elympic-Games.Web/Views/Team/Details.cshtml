@@ -1,0 +1,48 @@
+﻿@model Elympic_Games.Web.Data.Entities.Team
+
+@{
+    ViewData["Title"] = "Team Details";
+}
+
+<h1>Team Details</h1>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <div>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Country)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Country.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Game
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.GameType.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Team Manager
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.TeamManager.Email)
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+    <a asp-action="Manage" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
+</div>

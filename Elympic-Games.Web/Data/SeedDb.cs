@@ -73,6 +73,8 @@ namespace Elympic_Games.Web.Data
                 AddCountry("FR", "France");
                 AddCountry("SA", "Saudi Arabia");
                 AddCountry("USA", "United States of America");
+
+                await _context.SaveChangesAsync();
             }
 
             if (!_context.GameTypes.Any())
@@ -81,6 +83,8 @@ namespace Elympic_Games.Web.Data
                 AddGametype("League of Legends", 8, 5);
                 AddGametype("Counter-Strike 2", 8, 5);
                 AddGametype("Apex Legends", 5, 3);
+
+                await _context.SaveChangesAsync();
             }
         }
 

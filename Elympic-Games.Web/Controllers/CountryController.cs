@@ -174,7 +174,7 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var country = await _countryRepository.GetByIdAsync(id); ;
+            var country = await _countryRepository.GetByIdAsync(id);
 
             if (country.ImageId != Guid.Empty)
             {

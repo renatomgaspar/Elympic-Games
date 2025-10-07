@@ -112,6 +112,20 @@ namespace Elympic_Games.Web.Helpers
             return await _userManager.IsInRoleAsync(user, roleName);
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetUsersInRoleAsync(string role)
+        {
+            var users = await _userManager.GetUsersInRoleAsync(role);
+
+            return users
+                .Select(u => new SelectListItem
+                {
+                    Text =  u.Email,
+                    Value = u.Id
+                })
+                .OrderBy(u => u.Text)
+                .ToList();
+        }
+
         public IEnumerable<SelectListItem> GetComboRoles()
         {
             var list = _roleManager.Roles

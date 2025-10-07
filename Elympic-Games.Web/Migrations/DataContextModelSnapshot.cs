@@ -50,7 +50,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Arena");
+                    b.ToTable("Arena", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Classification", b =>
@@ -79,7 +79,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Classifications");
+                    b.ToTable("Classifications", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Country", b =>
@@ -104,7 +104,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Event", b =>
@@ -132,7 +132,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("ArenaId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.GameType", b =>
@@ -158,7 +158,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GameTypes");
+                    b.ToTable("GameTypes", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Match", b =>
@@ -205,7 +205,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("TeamTwoId");
 
-                    b.ToTable("Matches");
+                    b.ToTable("Matches", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Order", b =>
@@ -233,7 +233,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.OrderDetail", b =>
@@ -262,7 +262,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Player", b =>
@@ -294,7 +294,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Product", b =>
@@ -333,7 +333,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Team", b =>
@@ -366,7 +366,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("TeamManagerId");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.Ticket", b =>
@@ -394,7 +394,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.TicketOrder", b =>
@@ -419,7 +419,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TicketOrders");
+                    b.ToTable("TicketOrders", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.TicketOrderDetail", b =>
@@ -445,7 +445,7 @@ namespace Elympic_Games.Web.Migrations
 
                     b.HasIndex("TicketOrderId");
 
-                    b.ToTable("TicketOrderDetail");
+                    b.ToTable("TicketOrderDetail", (string)null);
                 });
 
             modelBuilder.Entity("Elympic_Games.Web.Data.Entities.User", b =>
