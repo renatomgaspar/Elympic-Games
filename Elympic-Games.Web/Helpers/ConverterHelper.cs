@@ -2,6 +2,7 @@
 using Elympic_Games.Web.Models.Accounts;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Gametypes;
+using Elympic_Games.Web.Models.Players;
 using Elympic_Games.Web.Models.Products;
 using Elympic_Games.Web.Models.Teams;
 
@@ -132,6 +133,32 @@ namespace Elympic_Games.Web.Helpers
                 CountryId = team.CountryId,
                 GameTypeId = team.GameTypeId,
                 TeamManagerId = team.TeamManagerId
+            };
+        }
+
+        public Player ToPlayer(PlayerViewModel model, bool isNew)
+        {
+            return new Player
+            {
+                Id = isNew ? 0 : model.Id,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                BirthDate = model.BirthDate,
+                TeamId = model.TeamId,
+                IsPlaying = model.IsPlaying
+            };
+        }
+
+        public PlayerViewModel ToPlayerViewModel(Player player)
+        {
+            return new PlayerViewModel
+            {
+                Id = player.Id,
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                BirthDate = player.BirthDate,
+                TeamId = player.TeamId,
+                IsPlaying = player.IsPlaying
             };
         }
     }

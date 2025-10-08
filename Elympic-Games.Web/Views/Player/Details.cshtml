@@ -1,0 +1,66 @@
+﻿@model Elympic_Games.Web.Data.Entities.Player
+
+@{
+    ViewData["Title"] = "Player Details";
+}
+
+<h1>Player Details</h1>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <div>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.FirstName)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.LastName)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.BirthDate)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.IsPlaying)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.IsPlaying)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Team Name
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Team.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Playing for
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Team.Country.Name)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Game
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Team.GameType.Name)
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+    <a asp-action="Manage" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
+</div>

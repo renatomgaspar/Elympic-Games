@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Elympic_Games.Web.Data.Entities;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
-namespace Elympic_Games.Web.Data.Entities
+namespace Elympic_Games.Web.Models.Players
 {
-    public class Player : IEntity
+    public class PlayerViewModel
     {
         public int Id { get; set; }
 
@@ -19,13 +22,12 @@ namespace Elympic_Games.Web.Data.Entities
 
         [Required]
         [Display(Name = "Birth Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime BirthDate { get; set; }
 
 
         [Required]
         public int TeamId { get; set; }
-        public Team Team { get; set; }
 
 
         [Required]
@@ -33,7 +35,7 @@ namespace Elympic_Games.Web.Data.Entities
         public bool IsPlaying { get; set; }
 
 
-        [Display(Name = "Full Name")]
-        public string FullName => $"{FirstName} {LastName}";
+        [BindNever]
+        public IEnumerable<SelectListItem>? Teams { get; set; }
     }
 }

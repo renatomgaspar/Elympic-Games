@@ -35,6 +35,12 @@
                                 </ul>
                             </li>
                         }
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Team Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Player" asp-action="Manage">Manage Team Players</a>
+                            </li>
+                        }
                         else
                         {
                             <li class="nav-item">

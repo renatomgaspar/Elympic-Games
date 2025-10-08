@@ -20,11 +20,6 @@ namespace Elympic_Games.Web.Controllers
             _converterHelper = converterHelper;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [Authorize]
         [Authorize(Roles = "Admin")]
         public IActionResult Manage()
@@ -34,7 +29,8 @@ namespace Elympic_Games.Web.Controllers
                 .Include(t => t.GameType)
                 .Include(t => t.Country)
                 .Include(t => t.TeamManager)
-                .OrderBy(c => c.Country.Name));
+                .OrderBy(t => t.Country.Name)
+                .ThenBy(t => t.GameType.Name));
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -173,13 +169,13 @@ namespace Elympic_Games.Web.Controllers
                 return NotFound();
             }
 
-            var gameType = await _teamRepository.GetTeamAsync(id.Value);
-            if (gameType == null)
+            var team = await _teamRepository.GetTeamAsync(id.Value);
+            if (team == null)
             {
                 return NotFound();
             }
 
-            return View(gameType);
+            return View(team);
         }
 
         [HttpPost, ActionName("Delete")]

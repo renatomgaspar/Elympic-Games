@@ -2,6 +2,7 @@
 using Elympic_Games.Web.Models.Accounts;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Gametypes;
+using Elympic_Games.Web.Models.Players;
 using Elympic_Games.Web.Models.Products;
 using Elympic_Games.Web.Models.Teams;
 
@@ -28,5 +29,9 @@ namespace Elympic_Games.Web.Helpers
         Team ToTeam(TeamViewModel model, bool isNew);
 
         TeamViewModel ToTeamViewModel(Team team);
+
+        Player ToPlayer(PlayerViewModel model, bool isNew);
+
+        PlayerViewModel ToPlayerViewModel(Player player);
     }
 }
