@@ -295,5 +295,10 @@ namespace Elympic_Games.Web.Controllers
 
             return this.View(model);
         }
+
+        public IActionResult NotAuthorized()
+        {
+            return View();
+        }
     }
 }
