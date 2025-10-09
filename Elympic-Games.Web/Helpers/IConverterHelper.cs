@@ -1,5 +1,6 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
+using Elympic_Games.Web.Models.Arenas;
 using Elympic_Games.Web.Models.Cities;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Gametypes;
@@ -38,5 +39,9 @@ namespace Elympic_Games.Web.Helpers
         City ToCity(CityViewModel model, bool isNew);
 
         CityViewModel ToCityViewModel(City city);
+
+        Arena ToArena(ArenaViewModel model, bool isNew);
+
+        ArenaViewModel ToArenaViewModel(Arena arena);
     }
 }

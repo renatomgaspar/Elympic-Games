@@ -1,0 +1,84 @@
+﻿@model Elympic_Games.Web.Models.Arenas.ArenaViewModel
+
+@{
+    ViewData["Title"] = "Register Arena";
+}
+
+<h2>Register Arena</h2>
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group mb-2">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="TotalCapacity"></label>
+                <input asp-for="TotalCapacity" class="form-control" />
+                <span asp-validation-for="TotalCapacity" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="AccessibleSeating"></label>
+                <input asp-for="AccessibleSeating" class="form-control" />
+                <span asp-validation-for="AccessibleSeating" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CityId" class="form-label">Country</label>
+                <select asp-for="CityId" asp-items="Model.Cities" class="form-select"></select>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <input type="submit" value="New City" class="btn btn-primary" />
+                <a asp-action="Manage" class="btn btn-success">Go Back <i class="fa-solid fa-circle-left"></i></a>
+            </div>
+        </form>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successDialog" class="modal fade">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Success</h4>
+                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+                </div>
+                <div class="modal-body">
+                    <p>@TempData["SuccessMessage"]</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnOk">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            var modal = $("#successDialog");
+            if (modal.length) {
+                modal.modal("show");
+            }
+
+            $("#btnOk").click(function () {
+                modal.modal("hide");
+            });
+        });
+    </script>
+}

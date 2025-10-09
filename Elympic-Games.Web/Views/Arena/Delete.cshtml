@@ -1,0 +1,49 @@
+﻿@model Elympic_Games.Web.Data.Entities.Arena
+
+@{
+    ViewData["Title"] = "Delete Arena";
+}
+
+<h1>Delete Arena</h1>
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.TotalCapacity)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.TotalCapacity)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.AccessibleSeating)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.AccessibleSeating)
+                </dd>
+                <dt class="col-sm-3">
+                    City
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.City.Name)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <img src="@Url.Content(Model.City.Country.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto">
+        </div>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete <i class="fa-solid fa-trash"></i></button>
+        <a asp-action="Manage" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
+    </form>
+</div>

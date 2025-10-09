@@ -1,0 +1,49 @@
+﻿@model Elympic_Games.Web.Data.Entities.Arena
+
+@{
+    ViewData["Title"] = "Arena Details";
+}
+
+<h1>Arena Details</h1>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TotalCapacity)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.TotalCapacity)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.AccessibleSeating)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.AccessibleSeating)
+                </dd>
+                <dt class="col-sm-4">
+                    City
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.City.Name)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <img src="@Url.Content(Model.City.Country.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto">
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Manage" class="btn btn-success">Back to List</a>
+</div>

@@ -1,5 +1,6 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
+using Elympic_Games.Web.Models.Arenas;
 using Elympic_Games.Web.Models.Cities;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Gametypes;
@@ -180,6 +181,30 @@ namespace Elympic_Games.Web.Helpers
                 Id = city.Id,
                 Name = city.Name,
                 CountryId = city.CountryId
+            };
+        }
+
+        public Arena ToArena(ArenaViewModel model, bool isNew)
+        {
+            return new Arena
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                CityId = model.CityId,
+                TotalCapacity = model.TotalCapacity,
+                AccessibleSeating = model.AccessibleSeating
+            };
+        }
+
+        public ArenaViewModel ToArenaViewModel(Arena arena)
+        {
+            return new ArenaViewModel
+            {
+                Id = arena.Id,
+                Name = arena.Name,
+                CityId = arena.CityId,
+                TotalCapacity = arena.TotalCapacity,
+                AccessibleSeating = arena.AccessibleSeating
             };
         }
     }

@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Elympic_Games.Web.Data.Entities;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
-namespace Elympic_Games.Web.Data.Entities
+namespace Elympic_Games.Web.Models.Arenas
 {
-    public class Arena : IEntity
+    public class ArenaViewModel
     {
         public int Id { get; set; }
 
@@ -13,7 +16,6 @@ namespace Elympic_Games.Web.Data.Entities
 
         [Required]
         public int CityId { get; set; }
-        public City City { get; set; }
 
 
         [Required]
@@ -24,5 +26,9 @@ namespace Elympic_Games.Web.Data.Entities
         [Required]
         [Display(Name = "Number of Accessible Seating")]
         public int AccessibleSeating { get; set; }
+
+
+        [BindNever]
+        public IEnumerable<SelectListItem>? Cities { get; set; }
     }
 }
