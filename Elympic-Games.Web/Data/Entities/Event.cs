@@ -24,6 +24,7 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
+        public int ArenaId { get; set; }
         public Arena Arena { get; set; }
     }
 }

@@ -10,14 +10,14 @@ namespace Elympic_Games.Web.Data
 
         public ArenaRepository(DataContext context) : base(context)
         {
-            _context = context; ;
+            _context = context;
         }
 
         public async Task<Arena> GetArenaAsync(int id)
         {
             return await _context.Arena
                 .Include(a => a.City)
-               .ThenInclude(c => c.Country)
+                .ThenInclude(c => c.Country)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 

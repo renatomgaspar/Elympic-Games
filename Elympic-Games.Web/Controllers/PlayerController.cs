@@ -184,9 +184,9 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var team = await _playerRepository.GetByIdAsync(id);
+            var player = await _playerRepository.GetByIdAsync(id);
 
-            await _playerRepository.DeleteAsync(team);
+            await _playerRepository.DeleteAsync(player);
             return RedirectToAction(nameof(Manage));
         }
     }

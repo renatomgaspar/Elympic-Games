@@ -3,6 +3,7 @@ using Elympic_Games.Web.Models.Accounts;
 using Elympic_Games.Web.Models.Arenas;
 using Elympic_Games.Web.Models.Cities;
 using Elympic_Games.Web.Models.Countries;
+using Elympic_Games.Web.Models.Events;
 using Elympic_Games.Web.Models.Gametypes;
 using Elympic_Games.Web.Models.Players;
 using Elympic_Games.Web.Models.Products;
@@ -43,5 +44,9 @@ namespace Elympic_Games.Web.Helpers
         Arena ToArena(ArenaViewModel model, bool isNew);
 
         ArenaViewModel ToArenaViewModel(Arena arena);
+
+        Event ToEvent(EventViewModel model, bool isNew);
+
+        EventViewModel ToEventViewModel(Event eventObj);
     }
 }

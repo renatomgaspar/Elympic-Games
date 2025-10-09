@@ -12,7 +12,7 @@ namespace Elympic_Games.Web.Data
 
         public CityRepository(DataContext context) : base(context)
         {
-            _context = context;;
+            _context = context;
         }
 
         public async Task<City> GetCityAsync(int id)
