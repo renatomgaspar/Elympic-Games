@@ -1,5 +1,6 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
+using Elympic_Games.Web.Models.Cities;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Gametypes;
 using Elympic_Games.Web.Models.Players;
@@ -159,6 +160,26 @@ namespace Elympic_Games.Web.Helpers
                 BirthDate = player.BirthDate,
                 TeamId = player.TeamId,
                 IsPlaying = player.IsPlaying
+            };
+        }
+
+        public City ToCity(CityViewModel model, bool isNew)
+        {
+            return new City
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                CountryId = model.CountryId
+            };
+        }
+
+        public CityViewModel ToCityViewModel(City city)
+        {
+            return new CityViewModel
+            {
+                Id = city.Id,
+                Name = city.Name,
+                CountryId = city.CountryId
             };
         }
     }

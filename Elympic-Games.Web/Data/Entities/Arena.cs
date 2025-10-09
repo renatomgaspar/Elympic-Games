@@ -12,11 +12,7 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
-        public string City { get; set; }
-
-
-        [Required]
-        public string Country { get; set; }
+        public City City { get; set; }
 
 
         [Required]

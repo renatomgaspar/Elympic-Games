@@ -21,6 +21,8 @@ namespace Elympic_Games.Web.Data
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<City> Cities { get; set; }
+
         public DbSet<GameType> GameTypes { get; set; }
 
         public DbSet<Match> Matches { get; set; }
@@ -82,6 +84,12 @@ namespace Elympic_Games.Web.Data
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.Team)
                 .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Arena>()
+                .HasOne(a => a.City)
+                .WithMany()
+                .HasForeignKey("CityId")
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
