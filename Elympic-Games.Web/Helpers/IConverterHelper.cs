@@ -5,6 +5,7 @@ using Elympic_Games.Web.Models.Cities;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Events;
 using Elympic_Games.Web.Models.Gametypes;
+using Elympic_Games.Web.Models.Matches;
 using Elympic_Games.Web.Models.Players;
 using Elympic_Games.Web.Models.Products;
 using Elympic_Games.Web.Models.Teams;
@@ -48,5 +49,9 @@ namespace Elympic_Games.Web.Helpers
         Event ToEvent(EventViewModel model, bool isNew);
 
         EventViewModel ToEventViewModel(Event eventObj);
+
+        Match ToMatch(MatchViewModel model, bool isNew);
+
+        MatchViewModel ToMatchViewModel(Match match);
     }
 }

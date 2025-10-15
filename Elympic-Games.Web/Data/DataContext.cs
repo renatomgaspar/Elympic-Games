@@ -92,6 +92,12 @@ namespace Elympic_Games.Web.Data
                 .HasForeignKey("CityId")
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.GameType)
+                .WithMany()
+                .HasForeignKey(e => e.GameTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
     }

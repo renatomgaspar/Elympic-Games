@@ -1,22 +1,19 @@
-﻿@model Elympic_Games.Web.Models.Events.EventViewModel
+﻿@model Elympic_Games.Web.Models.Matches.MatchViewModel
 
 @{
-    ViewData["Title"] = "Edit Event";
+    ViewData["Title"] = "Edit Match";
 }
 
-<h1>Edit Event</h1>
+<h1>Edit Match</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
-
-            <div class="form-group mb-2">
-                <label asp-for="Name">Name</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-warning"></span>
-            </div>
+            <input type="hidden" asp-for="EventId" />
+            <input type="hidden" asp-for="TeamOneScore" />
+            <input type="hidden" asp-for="TeamTwoScore" />
 
             <div class="form-group mb-2">
                 <label asp-for="StartDate"></label>
@@ -31,19 +28,19 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="GameTypeId" class="form-label">Game</label>
-                <select asp-for="GameTypeId" asp-items="Model.GameTypes" class="form-select"></select>
-                <span asp-validation-for="GameTypeId" class="text-danger"></span>
+                <label asp-for="TeamOneId" class="form-label">Team One</label>
+                <select asp-for="TeamOneId" asp-items="Model.Teams" class="form-select"></select>
+                <span asp-validation-for="TeamOneId" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="ArenaId" class="form-label">Arena</label>
-                <select asp-for="ArenaId" asp-items="Model.Arenas" class="form-select"></select>
-                <span asp-validation-for="ArenaId" class="text-danger"></span>
+                <label asp-for="TeamTwoId" class="form-label">Team Two</label>
+                <select asp-for="TeamTwoId" asp-items="Model.Teams" class="form-select"></select>
+                <span asp-validation-for="TeamTwoId" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-2">
-                <input type="submit" value="Update" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Manage" class="btn btn-success">Go Back <i class="fa-solid fa-circle-left"></i></a>
             </div>
         </form>

@@ -4,6 +4,7 @@ using Elympic_Games.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Elympic_Games.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20251010180901_AddGametypeToEvent")]
+    partial class AddGametypeToEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,6 +202,9 @@ namespace Elympic_Games.Web.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GameTypeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -219,6 +225,8 @@ namespace Elympic_Games.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("GameTypeId");
 
                     b.HasIndex("TeamOneId");
 
@@ -744,6 +752,12 @@ namespace Elympic_Games.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Elympic_Games.Web.Data.Entities.GameType", "GameType")
+                        .WithMany()
+                        .HasForeignKey("GameTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Elympic_Games.Web.Data.Entities.Team", "TeamOne")
                         .WithMany()
                         .HasForeignKey("TeamOneId")
@@ -757,6 +771,8 @@ namespace Elympic_Games.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
+
+                    b.Navigation("GameType");
 
                     b.Navigation("TeamOne");
 

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Elympic_Games.Web.Data.Entities.Event>
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+<h2 class="mb-4">Our Events</h2>
+
+<div class="row">
+    @foreach (var eventObj in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                @if (!string.IsNullOrEmpty(eventObj.GameType.ImageFullPath))
+                {
+                    <img src="@eventObj.GameType.ImageFullPath" class="card-img-top" alt="@eventObj.GameType.Name" style="height:200px; object-fit:cover;" />
+                }
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@eventObj.Name <i class="fa-solid fa-book"></i></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@eventObj.GameType.Name</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">@eventObj.Arena.Name - @eventObj.Arena.City.Name</h6>
+                    <hr />
+                    <p class="mt-auto">
+                        <span class="badge bg-primary">Start: @eventObj.StartDate.ToShortDateString() <i class="fa-solid fa-clock"></i></span>
+                        <span class="badge bg-primary">End: @eventObj.EndDate.ToShortDateString() <i class="fa-solid fa-clock"></i></span>
+                    </p>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <p>
+                            <a asp-controller="Match" asp-action="Create" asp-route-eventId="@eventObj.Id" class="btn btn-success">Create Match <i class="fa-solid fa-plus"></i></a>
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

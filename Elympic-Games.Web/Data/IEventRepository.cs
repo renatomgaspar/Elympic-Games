@@ -9,6 +9,6 @@ namespace Elympic_Games.Web.Data
 
         Task<int> IsEventAlreadyCreated(Event eventObj);
 
-        Task<IEnumerable<SelectListItem>> GetComboArenas();
+        Task<IEnumerable<SelectListItem>> GetComboItems(string table);
     }
 }

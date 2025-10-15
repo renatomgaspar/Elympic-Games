@@ -20,7 +20,19 @@
                     @Html.DisplayNameFor(model => model.StartDate)
                 </dt>
                 <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.StartDate)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.EndDate)
+                </dt>
+                <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.EndDate)
+                </dd>
+                <dt class="col-sm-4">
+                    Game
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.GameType.Name)
                 </dd>
                 <dt class="col-sm-4">
                     Arena

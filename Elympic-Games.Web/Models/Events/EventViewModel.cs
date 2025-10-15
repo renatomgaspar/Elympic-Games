@@ -27,7 +27,15 @@ namespace Elympic_Games.Web.Models.Events
 
 
         [Required]
+        public int GameTypeId { get; set; }
+
+
+        [Required]
         public int ArenaId { get; set; }
+
+
+        [BindNever]
+        public IEnumerable<SelectListItem>? GameTypes { get; set; }
 
 
         [BindNever]

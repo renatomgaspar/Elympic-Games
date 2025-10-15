@@ -1,22 +1,16 @@
-﻿@model Elympic_Games.Web.Data.Entities.Event
+﻿@model Elympic_Games.Web.Data.Entities.Match
 
 @{
-    ViewData["Title"] = "Event Details";
+    ViewData["Title"] = "Match Details";
 }
 
-<h1>Event Details</h1>
+<h1>Match Details</h1>
 
 <div>
     <hr />
     <div class="row">
         <div class="col-md-8">
             <dl class="row">
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Name)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Name)
-                </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.StartDate)
                 </dt>
@@ -30,27 +24,24 @@
                     @Html.DisplayFor(model => model.EndDate)
                 </dd>
                 <dt class="col-sm-4">
-                    Game
+                    Team One
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.GameType.Name)
+                    @Html.DisplayFor(model => model.TeamOne.Name) - @Html.DisplayFor(model => model.TeamOne.Country.Name)
                 </dd>
                 <dt class="col-sm-4">
-                    Arena
+                    Team Two
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Arena.Name)
-                </dd>
+                    @Html.DisplayFor(model => model.TeamTwo.Name) - @Html.DisplayFor(model => model.TeamTwo.Country.Name)
+                </dd>    
                 <dt class="col-sm-4">
-                    City
+                    Event
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Arena.City.Name)
+                    @Html.DisplayFor(model => model.Event.Name)
                 </dd>
             </dl>
-        </div>
-        <div class="col-md-4">
-            <img src="@Url.Content(Model.Arena.City.Country.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto">
         </div>
     </div>
 </div>

@@ -5,6 +5,7 @@ using Elympic_Games.Web.Models.Cities;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Events;
 using Elympic_Games.Web.Models.Gametypes;
+using Elympic_Games.Web.Models.Matches;
 using Elympic_Games.Web.Models.Players;
 using Elympic_Games.Web.Models.Products;
 using Elympic_Games.Web.Models.Teams;
@@ -217,6 +218,7 @@ namespace Elympic_Games.Web.Helpers
                 Name = model.Name,
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
+                GameTypeId = model.GameTypeId,
                 ArenaId = model.ArenaId
             };
         }
@@ -229,7 +231,38 @@ namespace Elympic_Games.Web.Helpers
                 Name = eventObj.Name,
                 StartDate = eventObj.StartDate,
                 EndDate = eventObj.EndDate,
+                GameTypeId = eventObj.GameTypeId,
                 ArenaId = eventObj.ArenaId
+            };
+        }
+
+        public Match ToMatch(MatchViewModel model, bool isNew)
+        {
+            return new Match
+            {
+                Id = isNew ? 0 : model.Id,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                TeamOneId = model.TeamOneId,
+                TeamTwoId = model.TeamTwoId,
+                TeamOneScore = model.TeamOneScore,
+                TeamTwoScore = model.TeamTwoScore,
+                EventId = model.EventId
+            };
+        }
+
+        public MatchViewModel ToMatchViewModel(Match match)
+        {
+            return new MatchViewModel
+            {
+                Id = match.Id,
+                StartDate = match.StartDate,
+                EndDate = match.EndDate,
+                TeamOneId = match.TeamOneId,
+                TeamTwoId = match.TeamTwoId,
+                TeamOneScore = match.TeamOneScore,
+                TeamTwoScore = match.TeamTwoScore,
+                EventId = match.EventId
             };
         }
     }

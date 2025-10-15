@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Elympic_Games.Web.Data.Entities;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
-namespace Elympic_Games.Web.Data.Entities
+namespace Elympic_Games.Web.Models.Matches
 {
-    public class Match : IEntity
+    public class MatchViewModel
     {
         public int Id { get; set; }
 
@@ -22,27 +25,26 @@ namespace Elympic_Games.Web.Data.Entities
         [Required]
         [Display(Name = "Team One")]
         public int TeamOneId { get; set; }
-        public Team TeamOne { get; set; }
 
 
         [Required]
         [Display(Name = "Team Two")]
         public int TeamTwoId { get; set; }
-        public Team TeamTwo { get; set; }
 
 
-        [Required]
         [Display(Name = "Team One Score")]
         public int? TeamOneScore { get; set; }
 
 
-        [Required]
         [Display(Name = "Team Two Score")]
         public int? TeamTwoScore { get; set; }
 
 
         [Required]
         public int EventId { get; set; }
-        public Event Event { get; set; }
+
+
+        [BindNever]
+        public IEnumerable<SelectListItem>? Teams { get; set; }
     }
 }

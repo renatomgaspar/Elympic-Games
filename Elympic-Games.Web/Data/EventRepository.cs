@@ -16,6 +16,7 @@ namespace Elympic_Games.Web.Data
         public async Task<Event> GetEventAsync(int id)
         {
             return await _context.Events
+                .Include(e => e.GameType)
                 .Include(e => e.Arena)
                 .ThenInclude(a => a.City)
                 .ThenInclude(c => c.Country)
@@ -46,9 +47,14 @@ namespace Elympic_Games.Web.Data
             return 1;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetComboArenas()
+        public async Task<IEnumerable<SelectListItem>> GetComboItems(string table)
         {
-            var list = _context.Arena
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            switch (table.ToLower())
+            {
+                case "arenas":
+                    list = _context.Arena
                         .Select(a => new SelectListItem
                         {
                             Text = a.Name + " - " + a.City.Country.Name,
@@ -56,10 +62,26 @@ namespace Elympic_Games.Web.Data
                         })
                         .OrderBy(a => a.Text)
                         .ToList();
+                    break;
+
+                case "gametypes":
+                    list = _context.GameTypes
+                        .Select(c => new SelectListItem
+                        {
+                            Text = c.Name,
+                            Value = c.Id.ToString()
+                        })
+                        .OrderBy(c => c.Text)
+                        .ToList();
+                    break;
+
+                default:
+                    break;
+            }
 
             list.Insert(0, new SelectListItem
             {
-                Text = "Select an Arena...",
+                Text = "Select an Item...",
                 Value = string.Empty
             });
 

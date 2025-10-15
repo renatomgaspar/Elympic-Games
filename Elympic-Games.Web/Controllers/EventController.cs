@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Arenas;
 using Elympic_Games.Web.Models.Events;
@@ -23,7 +24,13 @@ namespace Elympic_Games.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_eventRepository
+                .GetAll()
+                .Include(e => e.GameType)
+                .Include(e => e.Arena)
+                .ThenInclude(a => a.City)
+                .ThenInclude(c => c.Country)
+                .OrderBy(e => e.StartDate));
         }
 
         [Authorize]
@@ -60,7 +67,10 @@ namespace Elympic_Games.Web.Controllers
         {
             var model = new EventViewModel
             {
-                Arenas = await _eventRepository.GetComboArenas()
+                GameTypes = await _eventRepository.GetComboItems("gametypes"),
+                Arenas = await _eventRepository.GetComboItems("arenas"),
+                StartDate = DateTime.Now.Date,
+                EndDate = DateTime.Now.Date,
             };
 
             return View(model);
@@ -70,11 +80,18 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EventViewModel model)
         {
-            model.Arenas = await _eventRepository.GetComboArenas();
+            model.GameTypes = await _eventRepository.GetComboItems("gametypes");
+            model.Arenas = await _eventRepository.GetComboItems("arenas");
 
             if (ModelState.IsValid)
             {
                 var eventObj = _converterHelper.ToEvent(model, true);
+
+                if (model.StartDate < DateTime.Now || model.EndDate < DateTime.Now)
+                {
+                    ModelState.AddModelError(string.Empty, "Dates must in the future");
+                    return View(model);
+                }
 
                 if (model.StartDate > model.EndDate)
                 {
@@ -117,7 +134,8 @@ namespace Elympic_Games.Web.Controllers
             }
 
             var model = _converterHelper.ToEventViewModel(eventObj);
-            model.Arenas = await _eventRepository.GetComboArenas();
+            model.GameTypes = await _eventRepository.GetComboItems("gametypes");
+            model.Arenas = await _eventRepository.GetComboItems("arenas");
 
             return View(model);
         }
@@ -126,7 +144,8 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EventViewModel model)
         {
-            model.Arenas = await _eventRepository.GetComboArenas();
+            model.GameTypes = await _eventRepository.GetComboItems("gametypes");
+            model.Arenas = await _eventRepository.GetComboItems("arenas");
 
             if (ModelState.IsValid)
             {
