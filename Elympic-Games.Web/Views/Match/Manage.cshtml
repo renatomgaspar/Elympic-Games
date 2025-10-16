@@ -40,17 +40,21 @@
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TeamOne.Name) - @Html.DisplayFor(model => item.TeamOne.Country.Name)
+                    @Html.DisplayFor(modelItem => item.TeamOne.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TeamTwo.Name) - @Html.DisplayFor(model => item.TeamTwo.Country.Name)
+                    @Html.DisplayFor(modelItem => item.TeamTwo.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Event.Name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit <i class="fa-solid fa-pen-to-square"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details <i class="fa-solid fa-circle-info"></i></a>
+
+                    @if (item.TeamOneScore == 0 && item.TeamTwoScore == 0)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+                        <a asp-action="InsertScores" asp-route-id="@item.Id" class="btn btn-primary">Insert Scores <i class="fa-solid fa-circle-info"></i></a>
+                    }
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete <i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>

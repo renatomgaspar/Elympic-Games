@@ -1,11 +1,9 @@
 ﻿using Elympic_Games.Web.Data;
-using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Matches;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Elympic_Games.Web.Controllers
 {
@@ -25,9 +23,19 @@ namespace Elympic_Games.Web.Controllers
             _converterHelper = converterHelper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int eventId)
         {
-            return View();
+            var eventObj = await _eventRepository.GetEventAsync(eventId);
+
+            if (eventObj == null)
+            {
+                return NotFound();
+            }
+
+            var matches = await _matchRepository.GetMatchesByEventIdAsync(eventId);
+
+            return View(matches);
+
         }
 
         [Authorize]
@@ -273,6 +281,77 @@ namespace Elympic_Games.Web.Controllers
 
             await _matchRepository.DeleteAsync(match);
             return RedirectToAction(nameof(Manage));
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> InsertScores(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var match = await _matchRepository.GetMatchAsync(id.Value);
+            if (match == null)
+            {
+                return NotFound();
+            }
+
+            var model = _converterHelper.ToInsertScoresViewModel(match);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> InsertScores(InsertScoresViewModel model)
+        {
+            if (model.Id == null)
+            {
+                return NotFound();
+            }
+
+            var match = await _matchRepository.GetMatchAsync(model.Id);
+            if (match == null)
+            {
+                return NotFound();
+            }
+
+            model.TeamOne = match.TeamOne;
+            model.TeamTwo = match.TeamTwo;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (model.TeamOneScore == model.TeamTwoScore)
+                    {
+                        ModelState.AddModelError(string.Empty, "The match can not have a draw");
+                        return View(model);
+                    }
+
+                    match.TeamOneScore = model.TeamOneScore;
+                    match.TeamTwoScore = model.TeamTwoScore;
+
+                    await _matchRepository.UpdateAsync(match);
+                    await _matchRepository.CreateNextMatch(match);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _matchRepository.ExistAsync(model.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction(nameof(Manage));
+            }
+
+            return View(model);
         }
     }
 }

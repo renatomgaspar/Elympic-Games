@@ -53,5 +53,7 @@ namespace Elympic_Games.Web.Helpers
         Match ToMatch(MatchViewModel model, bool isNew);
 
         MatchViewModel ToMatchViewModel(Match match);
+
+        InsertScoresViewModel ToInsertScoresViewModel(Match match);
     }
 }

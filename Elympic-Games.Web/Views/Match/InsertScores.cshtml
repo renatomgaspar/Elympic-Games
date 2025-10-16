@@ -1,0 +1,51 @@
+﻿@model Elympic_Games.Web.Models.Matches.InsertScoresViewModel
+
+@{
+    ViewData["Title"] = "Insert Match Scores";
+}
+
+<h1>Insert Match Scores</h1>
+<h2>@Model.TeamOne.Name <strong>vs</strong> @Model.TeamTwo.Name</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="InsertScores" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="TeamOneId" />
+            <input type="hidden" asp-for="TeamTwoId" />
+
+            <div class="form-group mb-2">
+                <label asp-for="TeamOneScore">@Model.TeamOne.Name</label>
+                <input asp-for="TeamOneScore" class="form-control" />
+                <span asp-validation-for="TeamOneScore" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="TeamTwoScore">@Model.TeamTwo.Name</label>
+                <input asp-for="TeamTwoScore" class="form-control" />
+                <span asp-validation-for="TeamTwoScore" class="text-warning"></span>
+            </div>
+
+
+            <div class="form-group mb-2">
+                <input type="submit" value="Insert" class="btn btn-primary" />
+                <a asp-action="Manage" class="btn btn-success">Go Back <i class="fa-solid fa-circle-left"></i></a>
+            </div>
+        </form>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+    <div class="col-md-4">
+        <img src="@Url.Content(Model.TeamOne.Country.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto">
+    </div>
+    <div class="col-md-4">
+        <img src="@Url.Content(Model.TeamTwo.Country.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto">
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

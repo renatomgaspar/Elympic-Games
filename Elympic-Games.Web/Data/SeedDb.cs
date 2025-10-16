@@ -73,6 +73,7 @@ namespace Elympic_Games.Web.Data
                 AddCountry("FR", "France");
                 AddCountry("SA", "Saudi Arabia");
                 AddCountry("USA", "United States of America");
+                AddCountry("TBD", "To Be Determined");
 
                 await _context.SaveChangesAsync();
             }

@@ -29,8 +29,8 @@ namespace Elympic_Games.Web.Controllers
                 .Include(t => t.GameType)
                 .Include(t => t.Country)
                 .Include(t => t.TeamManager)
-                .OrderBy(t => t.Country.Name)
-                .ThenBy(t => t.GameType.Name));
+                .OrderBy(t => t.GameType.Name)
+                .ThenBy(t => t.Country.Name));
         }
 
         public async Task<IActionResult> Details(int? id)

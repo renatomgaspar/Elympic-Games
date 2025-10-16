@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Elympic_Games.Web.Data.Entities.Match>
+
+@{
+    ViewData["Title"] = "Event Matches";
+
+    var matchesList = Model.ToList();
+    var col1 = matchesList.Take(4).ToList();
+    var col2 = matchesList.Skip(4).Take(2).ToList();
+    var col3 = matchesList.Skip(6).Take(1).ToList();
+}
+
+<h1>Event Matches</h1>
+
+<div class="row">
+    <div class="col-md-4 border-end px-3">
+        <h3>Quarter Finals</h3>
+        <ul class="list-group mb-3">
+            @foreach (var match in col1)
+            {
+                <li class="list-group-item">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(match.TeamOne.Country?.ImageFullPath))
+                            {
+                                <img src="@Url.Content(match.TeamOne.Country.ImageFullPath)" alt="@match.TeamOne.Country.Code" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover" />
+                            }
+                            <span>@match.TeamOne.Country.Code</span>
+                        </div>
+                        <span class="fw-bold">@match.TeamOneScore - @match.TeamTwoScore</span>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">@match.TeamTwo.Country.Code</span>
+                            @if (!string.IsNullOrEmpty(match.TeamTwo.Country?.ImageFullPath))
+                            {
+                                <img src="@Url.Content(match.TeamTwo.Country.ImageFullPath)" alt="@match.TeamTwo.Country.Code" class="rounded-circle" style="width:40px;height:40px;object-fit:cover" />
+                            }
+                        </div>
+                    </div>
+                    <small class="text-muted">@match.StartDate.ToString("dd/MM/yyyy hh:mm tt")</small>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-4 border-end px-3">
+        <h3>Semi Final</h3>
+        <ul class="list-group mb-3">
+            @foreach (var match in col2)
+            {
+                <li class="list-group-item">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(match.TeamOne.Country?.ImageFullPath))
+                            {
+                                <img src="@Url.Content(match.TeamOne.Country.ImageFullPath)" alt="@match.TeamOne.Country.Code" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover" />
+                            }
+                            <span>@match.TeamOne.Country.Code</span>
+                        </div>
+                        <span class="fw-bold">@match.TeamOneScore - @match.TeamTwoScore</span>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">@match.TeamTwo.Country.Code</span>
+                            @if (!string.IsNullOrEmpty(match.TeamTwo.Country?.ImageFullPath))
+                            {
+                                <img src="@Url.Content(match.TeamTwo.Country.ImageFullPath)" alt="@match.TeamTwo.Country.Code" class="rounded-circle" style="width:40px;height:40px;object-fit:cover" />
+                            }
+                        </div>
+                    </div>
+                    <small class="text-muted">@match.StartDate.ToString("dd/MM/yyyy hh:mm tt")</small>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-4 px-3">
+        <h3>Grand Final</h3>
+        <ul class="list-group mb-3">
+            @foreach (var match in col3)
+            {
+                <li class="list-group-item">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(match.TeamOne.Country?.ImageFullPath))
+                            {
+                                <img src="@Url.Content(match.TeamOne.Country.ImageFullPath)" alt="@match.TeamOne.Country.Code" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover" />
+                            }
+                            <span>@match.TeamOne.Country.Code</span>
+                        </div>
+                        <span class="fw-bold">@match.TeamOneScore - @match.TeamTwoScore</span>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">@match.TeamTwo.Country.Code</span>
+                            @if (!string.IsNullOrEmpty(match.TeamTwo.Country?.ImageFullPath))
+                            {
+                                <img src="@Url.Content(match.TeamTwo.Country.ImageFullPath)" alt="@match.TeamTwo.Country.Code" class="rounded-circle" style="width:40px;height:40px;object-fit:cover" />
+                            }
+                        </div>
+                    </div>
+                    <small class="text-muted">@match.StartDate.ToString("dd/MM/yyyy hh:mm tt")</small>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Event" asp-action="Index" class="btn btn-success">
+        <i class="fa-solid fa-circle-left me-1"></i> Go Back
+    </a>
+</div>

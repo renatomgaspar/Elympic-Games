@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -14,6 +15,18 @@ namespace Elympic_Games.Web.Data
             _context = context;
         }
 
+        public async Task<List<Match>> GetMatchesByEventIdAsync(int eventId)
+        {
+            return await _context.Matches
+                .Where(m => m.EventId == eventId)
+                .Include(m => m.Event)
+                .Include(m => m.TeamOne)
+                .ThenInclude(t => t.Country)
+                .Include(m => m.TeamTwo)
+                .ThenInclude(t => t.Country)
+                .ToListAsync();
+        }
+
         public async Task<Match> GetMatchAsync(int id)
         {
             return await _context.Matches
@@ -23,6 +36,7 @@ namespace Elympic_Games.Web.Data
                 .ThenInclude(t => t.Country)
                 .Include(m => m.Event)
                 .ThenInclude(e => e.GameType)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
@@ -71,6 +85,54 @@ namespace Elympic_Games.Web.Data
             }
 
             return 0;
+        }
+
+        public async Task CreateNextMatch(Match match)
+        {
+            if (_context.Matches.Where(m => m.EventId == match.EventId).Count() < 7 || _context.Matches.Any(m => m.TeamTwo.Name == "To Be Determined"))
+            {
+                if (_context.Matches.Any(m => m.TeamTwo.Name == "To Be Determined"))
+                {
+                    Match matchCreated = await _context.Matches
+                        .FirstOrDefaultAsync(m => m.Id != match.Id && m.TeamTwo.Name == "To Be Determined");
+
+
+                    if (match.TeamOneScore > match.TeamTwoScore)
+                    {
+                        matchCreated.TeamTwoId = match.TeamOneId;
+                    }
+                    else
+                    {
+                        matchCreated.TeamTwoId = match.TeamTwoId;
+                    }
+
+                    UpdateAsync(matchCreated);
+                }
+                else
+                {
+                    var newMatch = new Match
+                    {
+                        Id = 0,
+                        StartDate = match.StartDate.AddDays(1),
+                        EndDate = match.EndDate.AddDays(1),
+                        TeamTwo = await _context.Teams.FirstOrDefaultAsync(t => t.Name == "To Be Determined"),
+                        TeamOneScore = 0,
+                        TeamTwoScore = 0,
+                        EventId = match.EventId
+                    };
+
+                    if (match.TeamOneScore > match.TeamTwoScore)
+                    {
+                        newMatch.TeamOneId = match.TeamOneId;
+                    }
+                    else
+                    {
+                        newMatch.TeamOneId = match.TeamTwoId;
+                    }
+
+                    CreateAsync(newMatch);
+                }
+            }
         }
 
         public async Task<IEnumerable<SelectListItem>> GetComboTeams(int gametypeId)

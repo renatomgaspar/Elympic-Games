@@ -265,5 +265,19 @@ namespace Elympic_Games.Web.Helpers
                 EventId = match.EventId
             };
         }
+
+        public InsertScoresViewModel ToInsertScoresViewModel(Match match)
+        {
+            return new InsertScoresViewModel
+            {
+                Id = match.Id,
+                TeamOneId = match.TeamOneId,
+                TeamOne = match.TeamOne,
+                TeamTwoId = match.TeamTwoId,
+                TeamTwo = match.TeamTwo,
+                TeamOneScore = match.TeamOneScore,
+                TeamTwoScore = match.TeamTwoScore,
+            };
+        }
     }
 }

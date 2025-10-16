@@ -21,15 +21,17 @@
                     <h6 class="card-subtitle mb-2 text-muted">@eventObj.Arena.Name - @eventObj.Arena.City.Name</h6>
                     <hr />
                     <p class="mt-auto">
-                        <span class="badge bg-primary">Start: @eventObj.StartDate.ToShortDateString() <i class="fa-solid fa-clock"></i></span>
-                        <span class="badge bg-primary">End: @eventObj.EndDate.ToShortDateString() <i class="fa-solid fa-clock"></i></span>
+                        <span class="badge bg-secondary">Start: @eventObj.StartDate.ToShortDateString() <i class="fa-solid fa-clock"></i></span>
+                        <span class="badge bg-secondary">End: @eventObj.EndDate.ToShortDateString() <i class="fa-solid fa-clock"></i></span>
                     </p>
-                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
-                    {
-                        <p>
-                            <a asp-controller="Match" asp-action="Create" asp-route-eventId="@eventObj.Id" class="btn btn-success">Create Match <i class="fa-solid fa-plus"></i></a>
-                        </p>
-                    }
+                    <p>
+                        <a asp-controller="Match" asp-action="Index" asp-route-eventId="@eventObj.Id" class="btn btn-success">Matches <i class="fa-solid fa-plus"></i></a>
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Match" asp-action="Create" asp-route-eventId="@eventObj.Id" class="btn btn-primary">Create Match <i class="fa-solid fa-plus"></i></a>
+                        }
+                    </p>
+                    
                 </div>
             </div>
         </div>
