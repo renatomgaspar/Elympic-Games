@@ -89,9 +89,9 @@ namespace Elympic_Games.Web.Data
 
         public async Task CreateNextMatch(Match match)
         {
-            if (_context.Matches.Where(m => m.EventId == match.EventId).Count() < 7 || _context.Matches.Any(m => m.TeamTwo.Name == "To Be Determined"))
+            if (await _context.Matches.Where(m => m.EventId == match.EventId).CountAsync() < 7 || await _context.Matches.AnyAsync(m => m.TeamTwo.Name == "To Be Determined"))
             {
-                if (_context.Matches.Any(m => m.TeamTwo.Name == "To Be Determined"))
+                if (await _context.Matches.AnyAsync(m => m.TeamTwo.Name == "To Be Determined"))
                 {
                     Match matchCreated = await _context.Matches
                         .FirstOrDefaultAsync(m => m.Id != match.Id && m.TeamTwo.Name == "To Be Determined");
@@ -106,7 +106,7 @@ namespace Elympic_Games.Web.Data
                         matchCreated.TeamTwoId = match.TeamTwoId;
                     }
 
-                    UpdateAsync(matchCreated);
+                    await UpdateAsync(matchCreated);
                 }
                 else
                 {
@@ -130,7 +130,7 @@ namespace Elympic_Games.Web.Data
                         newMatch.TeamOneId = match.TeamTwoId;
                     }
 
-                    CreateAsync(newMatch);
+                    await CreateAsync(newMatch);
                 }
             }
         }

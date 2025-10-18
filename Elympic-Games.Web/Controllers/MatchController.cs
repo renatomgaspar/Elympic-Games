@@ -11,15 +11,18 @@ namespace Elympic_Games.Web.Controllers
     {
         private readonly IMatchRepository _matchRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly IClassificationRepository _classificationRepository;
         private readonly IConverterHelper _converterHelper;
 
         public MatchController(
             IMatchRepository matchRepository,
             IEventRepository eventRepository,
+            IClassificationRepository classificationRepository,
             IConverterHelper converterHelper)
         {
             _matchRepository = matchRepository;
             _eventRepository = eventRepository;
+            _classificationRepository = classificationRepository;
             _converterHelper = converterHelper;
         }
 
@@ -335,6 +338,7 @@ namespace Elympic_Games.Web.Controllers
 
                     await _matchRepository.UpdateAsync(match);
                     await _matchRepository.CreateNextMatch(match);
+                    await _classificationRepository.CreateClassification(match);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

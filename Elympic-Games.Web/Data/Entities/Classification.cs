@@ -16,10 +16,14 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
+        public int EventId { get; set; }
+
         public Event Event { get; set; }
 
 
         [Required]
+        public int TeamId { get; set; }
+
         public Team Team { get; set; }
     }
 }

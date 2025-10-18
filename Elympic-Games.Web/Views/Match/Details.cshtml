@@ -47,6 +47,10 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    @if (Model.TeamOneScore == 0 && Model.TeamTwoScore == 0)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    }
+
     <a asp-action="Manage" class="btn btn-success">Back to List</a>
 </div>

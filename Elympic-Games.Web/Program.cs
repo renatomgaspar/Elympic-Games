@@ -43,6 +43,7 @@ builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IArenaRepository, ArenaRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
+builder.Services.AddScoped<IClassificationRepository, ClassificationRepository>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
 
