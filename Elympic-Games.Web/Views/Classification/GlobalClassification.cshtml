@@ -1,19 +1,20 @@
 ﻿@model IEnumerable<Elympic_Games.Web.Data.Entities.Classification>
 
 @{
-    ViewData["Title"] = "Classifications";
+    ViewData["Title"] = "Global Classifications";
     var classifications = Model.OrderBy(c => c.Rank).ToList();
 }
 
 <div class="container py-5">
     <div class="text-center mb-5">
         <h1 class="fw-bold text-primary">
-            <i class="fa-solid fa-ranking-star me-2"></i>@ViewBag.EventName - @ViewBag.EventGame - Classifications
+            <i class="fa-solid fa-ranking-star me-2 text-warning"></i>
+            @ViewBag.EventName - Global Classifications
         </h1>
-        <p class="text-muted mb-0">Final rankings and points for all participating teams.</p>
+        <p class="text-muted mb-0">Final rankings and total points for all participating teams.</p>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="card shadow border-0">
         <div class="card-body p-0">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-dark text-center">
@@ -33,8 +34,8 @@
                         string rankBadgeClass = classification.Rank switch
                         {
                             1 => "bg-warning text-dark fw-bold",
-                            2 => "bg-secondary text-white",
-                            3 => "bg-bronze text-white",
+                            2 => "bg-secondary text-white fw-semibold",
+                            3 => "bg-bronze text-white fw-semibold",
                             _ => "bg-light text-dark"
                         };
 
@@ -44,21 +45,24 @@
                                     @classification.Rank
                                 </span>
                             </td>
+
                             <td class="fw-semibold">
                                 <div class="d-flex align-items-center justify-content-center">
                                     @if (!string.IsNullOrEmpty(country?.ImageFullPath))
                                     {
                                         <img src="@Url.Content(country.ImageFullPath)"
                                              alt="@country.Code"
-                                             class="rounded-circle me-2 border"
-                                             style="width:40px;height:40px;object-fit:cover;" />
+                                             class="rounded-circle me-2 border shadow-sm"
+                                             style="width:45px;height:45px;object-fit:cover;" />
                                     }
-                                    <span>@team.Name</span>
+                                    <span class="text-capitalize">@team.Name</span>
                                 </div>
                             </td>
+
                             <td>
                                 <span class="text-uppercase fw-semibold">@country?.Code</span>
                             </td>
+
                             <td>
                                 <span class="fw-bold text-success">@classification.Points</span>
                             </td>
@@ -76,7 +80,6 @@
     </div>
 </div>
 
-
 <style>
     .bg-bronze {
         background-color: #cd7f32 !important;
@@ -85,5 +88,9 @@
     table tbody tr:hover {
         background-color: #f8f9fa;
         transition: background-color 0.2s ease-in-out;
+    }
+
+    h1 i {
+        animation: float 1.8s ease-in-out infinite;
     }
 </style>

@@ -27,7 +27,7 @@ namespace Elympic_Games.Web.Data
         {
             var existentEvent = _context.Events
                     .AsNoTracking()
-                    .FirstOrDefault(e => e.Id != eventObj.Id && e.Name == eventObj.Name);
+                    .FirstOrDefault(e => e.Id != eventObj.Id && e.Name == eventObj.Name && e.GameTypeId == eventObj.GameTypeId);
 
             if (existentEvent != null)
             {

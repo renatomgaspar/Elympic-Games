@@ -12,6 +12,49 @@ namespace Elympic_Games.Web.Data
             _context = context;
         }
 
+        public async Task<List<Classification>> GetClassificationsForAllAsync(int eventId)
+        {
+            var eventObj = await _context.Events.FirstOrDefaultAsync(e => e.Id == eventId);
+
+            if (eventObj == null)
+            {
+                return new List<Classification>();
+            }
+                
+            var classifications = await _context.Classifications
+                .Include(c => c.Event)
+                .Include(c => c.Team)
+                    .ThenInclude(t => t.Country)
+                .Where(c => c.Event.Name == eventObj.Name)
+                .ToListAsync();
+
+            var grouped = classifications
+                .GroupBy(c => c.Team.Country)
+                .Select(g => new Classification
+                {
+                    Team = new Team
+                    {
+                        Country = g.Key,
+                        CountryId = g.Key.Id,
+                        Name = g.Key.Name
+                    },
+                    Points = g.Sum(x => x.Points),
+                    Rank = 0,
+                    Event = eventObj
+                })
+                .OrderByDescending(c => c.Points)
+                .ToList();
+
+            int rank = 1;
+            foreach (var c in grouped)
+            {
+                c.Rank = rank++;
+            }
+
+            return grouped;
+        }
+
+
         public async Task<List<Classification>> GetClassificationsByEventIdAsync(int eventId)
         {
             return await _context.Classifications

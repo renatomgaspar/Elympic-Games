@@ -39,6 +39,7 @@ namespace Elympic_Games.Web.Controllers
         {
             return View(_eventRepository
                 .GetAll()
+                .Include(e => e.GameType)
                 .Include(e => e.Arena)
                 .ThenInclude(a => a.City)
                 .ThenInclude(c => c.Country)
