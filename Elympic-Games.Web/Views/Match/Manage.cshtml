@@ -10,12 +10,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
                 Team One
             </th>
             <th>
@@ -23,6 +17,9 @@
             </th>
             <th>
                 Event
+            </th>
+            <th>
+                Game
             </th>
             <th class="w-25">
                 Actions
@@ -34,12 +31,6 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.TeamOne.Name)
                 </td>
                 <td>
@@ -47,6 +38,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Event.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.GameType.Name)
                 </td>
                 <td>
                     @if (item.TeamOneScore == 0 && item.TeamTwoScore == 0)
@@ -57,7 +51,7 @@
                     }
                     else
                     {
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Details <i class="fa-solid fa-trash"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Details <i class="fa-solid fa-circle-info"></i></a>
                     }
                 </td>
             </tr>

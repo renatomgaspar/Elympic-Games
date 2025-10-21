@@ -52,6 +52,7 @@ namespace Elympic_Games.Web.Controllers
                 .Include(m => m.TeamTwo)
                 .ThenInclude(t => t.Country)
                 .Include(m => m.Event)
+                .ThenInclude(e => e.GameType)
                 .OrderBy(m => m.Event.Name)
                 .ThenBy(m => m.StartDate));
         }

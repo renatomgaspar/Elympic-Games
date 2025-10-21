@@ -25,9 +25,9 @@
                         <span class="badge bg-secondary">End: @eventObj.EndDate.ToShortDateString() <i class="fa-solid fa-clock"></i></span>
                     </p>
                     <p>
-                        <a asp-controller="Match" asp-action="Index" asp-route-eventId="@eventObj.Id" class="btn btn-success">Matches <i class="fa-solid fa-plus"></i></a>
-                        <a asp-controller="Classification" asp-action="ClassificationPerEvent" asp-route-eventId="@eventObj.Id" class="btn btn-secondary">Classification <i class="fa-solid fa-plus"></i></a>
-                        <a asp-controller="Classification" asp-action="GlobalClassification" asp-route-eventId="@eventObj.Id" class="btn btn-warning">Event Classification <i class="fa-solid fa-plus"></i></a>
+                        <a asp-controller="Match" asp-action="Index" asp-route-eventId="@eventObj.Id" class="btn btn-success">Matches</a>
+                        <a asp-controller="Classification" asp-action="ClassificationPerEvent" asp-route-eventId="@eventObj.Id" class="btn btn-secondary">Classification</a>
+                        <a asp-controller="Classification" asp-action="GlobalClassification" asp-route-eventId="@eventObj.Id" class="btn btn-warning">Event Classification</a>
                         @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
                         {
                             <a asp-controller="Match" asp-action="Create" asp-route-eventId="@eventObj.Id" class="btn btn-primary mt-1">Create Match <i class="fa-solid fa-plus"></i></a>
