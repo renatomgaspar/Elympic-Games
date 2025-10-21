@@ -1,0 +1,78 @@
+﻿@model Elympic_Games.Web.Models.Tickets.TicketsViewModel
+
+@{
+    ViewData["Title"] = "Create Ticket";
+}
+
+<h2>Create Ticket</h2>
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <label asp-for="EventId" class="form-label">Country</label>
+                <select asp-for="EventId" asp-items="Model.Events" class="form-select"></select>
+                <span asp-validation-for="EventId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="TicketType" class="form-label">Country</label>
+                <select asp-for="TicketType" asp-items="Model.TicketTypes" class="form-select"></select>
+                <span asp-validation-for="TicketType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="Price"></label>
+                <input asp-for="Price" class="form-control" type="number" />
+                <span asp-validation-for="Price" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <input type="submit" value="New Ticket" class="btn btn-primary" />
+                <a asp-action="Manage" class="btn btn-success">Go Back <i class="fa-solid fa-circle-left"></i></a>
+            </div>
+        </form>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successDialog" class="modal fade">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Success</h4>
+                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+                </div>
+                <div class="modal-body">
+                    <p>@TempData["SuccessMessage"]</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnOk">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            var modal = $("#successDialog");
+            if (modal.length) {
+                modal.modal("show");
+            }
+
+            $("#btnOk").click(function () {
+                modal.modal("hide");
+            });
+        });
+    </script>
+}

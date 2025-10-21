@@ -9,6 +9,7 @@ using Elympic_Games.Web.Models.Matches;
 using Elympic_Games.Web.Models.Players;
 using Elympic_Games.Web.Models.Products;
 using Elympic_Games.Web.Models.Teams;
+using Elympic_Games.Web.Models.Tickets;
 
 namespace Elympic_Games.Web.Helpers
 {
@@ -277,6 +278,28 @@ namespace Elympic_Games.Web.Helpers
                 TeamTwo = match.TeamTwo,
                 TeamOneScore = match.TeamOneScore,
                 TeamTwoScore = match.TeamTwoScore,
+            };
+        }
+
+        public Ticket ToTicket(TicketsViewModel model, bool isNew)
+        {
+            return new Ticket
+            {
+                Id = isNew ? 0 : model.Id,
+                EventId = model.EventId,
+                TicketType = model.TicketType,
+                Price = model.Price
+            };
+        }
+
+        public TicketsViewModel ToTicketViewModel(Ticket ticket)
+        {
+            return new TicketsViewModel
+            {
+                Id = ticket.Id,
+                EventId = ticket.EventId,
+                TicketType = ticket.TicketType,
+                Price = ticket.Price
             };
         }
     }

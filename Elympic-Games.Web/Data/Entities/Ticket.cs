@@ -8,14 +8,12 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         [Required]
+        public int EventId { get; set; }
         public Event Event { get; set; }
 
 
         [Required]
-        public int NoTicketEvent { get; set; }
-
-
-        [Required]
+        [Display(Name = "Ticket Type")]
         public string TicketType { get; set; }
 
 

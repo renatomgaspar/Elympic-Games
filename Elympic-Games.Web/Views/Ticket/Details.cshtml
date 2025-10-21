@@ -1,0 +1,46 @@
+﻿@model Elympic_Games.Web.Data.Entities.Ticket
+
+@{
+    ViewData["Title"] = "Ticket Details";
+}
+
+<h1>Ticket Details</h1>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    Event 
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Event.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    Game
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Event.GameType.Name)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TicketType)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.TicketType)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Manage" class="btn btn-success">Back to List</a>
+</div>

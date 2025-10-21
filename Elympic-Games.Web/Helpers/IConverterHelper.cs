@@ -9,6 +9,7 @@ using Elympic_Games.Web.Models.Matches;
 using Elympic_Games.Web.Models.Players;
 using Elympic_Games.Web.Models.Products;
 using Elympic_Games.Web.Models.Teams;
+using Elympic_Games.Web.Models.Tickets;
 
 namespace Elympic_Games.Web.Helpers
 {
@@ -55,5 +56,9 @@ namespace Elympic_Games.Web.Helpers
         MatchViewModel ToMatchViewModel(Match match);
 
         InsertScoresViewModel ToInsertScoresViewModel(Match match);
+
+        Ticket ToTicket(TicketsViewModel model, bool isNew);
+
+        TicketsViewModel ToTicketViewModel(Ticket ticket);
     }
 }
