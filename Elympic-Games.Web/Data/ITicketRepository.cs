@@ -10,5 +10,7 @@ namespace Elympic_Games.Web.Data
         Task<bool> IsTicketAlreadyCreated(Ticket ticket);
 
         Task<IEnumerable<SelectListItem>> GetComboEvents();
+
+        IEnumerable<SelectListItem> GetTicketsInEvent();
     }
 }

@@ -57,5 +57,23 @@ namespace Elympic_Games.Web.Data
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetTicketsInEvent()
+        {
+            var list = _context.Tickets.Select(t => new SelectListItem
+            {
+                Text = t.Event.Name + " - " + t.Event.GameType.Name + " - " + t.TicketType + " - " + t.Price,
+                Value = t.Id.ToString()
+            }).ToList();
+
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "Select a Ticket...",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

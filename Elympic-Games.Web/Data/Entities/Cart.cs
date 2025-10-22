@@ -2,12 +2,18 @@
 
 namespace Elympic_Games.Web.Data.Entities
 {
-    public class TicketOrderDetail : IEntity
+    public class Cart
     {
         public int Id { get; set; }
 
 
         [Required]
+        public int UserId { get; set; }
+        public User User { get; set; }
+
+
+        [Required]
+        public int TicketId { get; set; }
         public Ticket Ticket { get; set; }
 
 
@@ -15,7 +21,8 @@ namespace Elympic_Games.Web.Data.Entities
         public decimal Price { get; set; }
 
 
-        public int Quantity { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        public double Quantity { get; set; }
 
 
         public decimal Value => Price * (decimal)Quantity;

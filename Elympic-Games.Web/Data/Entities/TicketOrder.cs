@@ -20,7 +20,11 @@ namespace Elympic_Games.Web.Data.Entities
         public DateTime OrderDate { get; set; }
 
 
-        [Required]
-        public decimal TotalPrice { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        public double Quantity => Items == null ? 0 : Items.Sum(x => x.Quantity);
+
+
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal Value => Items == null ? 0 : Items.Sum(x => x.Value);
     }
 }

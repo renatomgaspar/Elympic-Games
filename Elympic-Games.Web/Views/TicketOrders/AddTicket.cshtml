@@ -1,0 +1,39 @@
+﻿@model Elympic_Games.Web.Models.TicketOrders.AddItemViewModel
+@{
+    ViewData["Title"] = "Add Ticket";
+}
+
+<h2>Add Ticket</h2>
+
+<h4>To Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddTicket">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-2">
+                <label asp-for="TicketId" class="control-label"></label>
+                <select asp-for="TicketId" asp-items="Model.Tickets" class="form-control"></select>
+                <span asp-validation-for="TicketId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" value="Create" class="btn btn-primary">Add <i class="fa-solid fa-plus"></i></button>
+                <a asp-action="Cart" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -37,6 +37,9 @@ namespace Elympic_Games.Web.Data
 
         public DbSet<TicketOrder> TicketOrders { get; set; }
 
+        public DbSet<Cart> Carts { get; set; }
+
+
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -65,10 +68,6 @@ namespace Elympic_Games.Web.Data
 
             modelBuilder.Entity<Ticket>()
               .Property(t => t.Price)
-              .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<TicketOrder>()
-              .Property(t => t.TotalPrice)
               .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Match>()

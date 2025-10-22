@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Elympic_Games.Web.Data.Entities.Cart>
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<h2>Your Cart</h2>
+
+
+<p>
+    <a asp-action="AddTicket" class="btn btn-success">Add Ticket <i class="fa-solid fa-plus"></i></a>
+    <a asp-action="ConfirmOrder" class="btn btn-primary" id="btnConfirm">Confirm Order <i class="fa-solid fa-check"></i></a>
+    <a asp-action="Index" class="btn btn-secondary" id="btnConfirm">Ticket Orders History <i class="fa-solid fa-clock"></i></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Event
+            </th>
+            <th>
+                Game
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ticket.TicketType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ticket.Event.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ticket.Event.GameType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ticket.TicketType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td id="@item.Id">
+                    <a asp-action="DeleteItem" asp-route-id="@item.Id" class="btn btn-danger" id="btnDeleteItem">Delete <i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
