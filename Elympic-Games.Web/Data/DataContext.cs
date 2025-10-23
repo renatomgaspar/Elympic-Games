@@ -37,6 +37,8 @@ namespace Elympic_Games.Web.Data
 
         public DbSet<TicketOrder> TicketOrders { get; set; }
 
+        public DbSet<TicketOrderDetail> TicketOrderDetails { get; set; }
+
         public DbSet<Cart> Carts { get; set; }
 
 

@@ -11,6 +11,10 @@ namespace Elympic_Games.Web.Data
 
         Task<IQueryable<Cart>> GetCartAsync(string userName);
 
+        Task<IQueryable<TicketOrderDetail>> GetTicketOrderDetails(int id);
+
+        Task<TicketOrderResult> ConfirmOrderAsync(string userName);
+
         Task DeleteTicketFromCartAsync(int id);
     }
 }

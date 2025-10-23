@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Elympic_Games.Web.Data.Entities.Cart>
+﻿@model IEnumerable<Elympic_Games.Web.Data.Entities.TicketOrderDetail>
 @{
-    ViewData["Title"] = "Your Cart";
+    ViewData["Title"] = "Your Order Details";
     var totalPrice = Model.Sum(item => item.Price);
 }
 
@@ -8,10 +8,7 @@
 
 
 <p>
-    <a asp-action="AddTicket" class="btn btn-success">Add Ticket <i class="fa-solid fa-plus"></i></a>
-    <a asp-action="ConfirmOrder" class="btn btn-primary" id="btnConfirm">Confirm Order <i class="fa-solid fa-check"></i></a>
     <a asp-action="Index" class="btn btn-secondary" id="btnConfirm">Ticket Orders History <i class="fa-solid fa-clock"></i></a>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 </p>
 <table class="table">
     <thead>
@@ -27,9 +24,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                Actions
             </th>
         </tr>
     </thead>
@@ -49,16 +43,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-                <td id="@item.Id">
-                    <a asp-action="DeleteItem" asp-route-id="@item.Id" class="btn btn-danger" id="btnDeleteItem">Delete <i class="fa-solid fa-trash"></i></a>
-                </td>
             </tr>
         }
 
         <tr>
             <td colspan="3" class="text-end"><strong>Total:</strong></td>
             <td>@totalPrice.ToString("C")</td>
-            <td></td>   
+            <td></td>
         </tr>
     </tbody>
 </table>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Elympic_Games.Web.Data.Entities
 {
@@ -31,5 +32,13 @@ namespace Elympic_Games.Web.Data.Entities
         [Required]
         public int ArenaId { get; set; }
         public Arena Arena { get; set; }
+
+
+        [ValidateNever]
+        public int AvailableSeats { get; set; }
+
+
+        [ValidateNever]
+        public int AvailableAccessibleSeats { get; set; }
     }
 }

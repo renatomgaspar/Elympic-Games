@@ -12,13 +12,16 @@ namespace Elympic_Games.Web.Controllers
     public class EventController : Controller
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IArenaRepository _arenaRepository;
         private readonly IConverterHelper _converterHelper;
 
         public EventController(
             IEventRepository eventRepository,
+            IArenaRepository arenaRepository,
             IConverterHelper converterHelper)
         {
             _eventRepository = eventRepository;
+            _arenaRepository = arenaRepository;
             _converterHelper = converterHelper;
         }
 
@@ -87,6 +90,11 @@ namespace Elympic_Games.Web.Controllers
             if (ModelState.IsValid)
             {
                 var eventObj = _converterHelper.ToEvent(model, true);
+
+                var arena = await _arenaRepository.GetArenaAsync(eventObj.ArenaId);
+
+                eventObj.AvailableSeats = arena.TotalCapacity - arena.AccessibleSeating;
+                eventObj.AvailableAccessibleSeats = arena.AccessibleSeating;
 
                 if (model.StartDate < DateTime.Now || model.EndDate < DateTime.Now)
                 {

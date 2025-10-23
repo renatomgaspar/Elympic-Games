@@ -1,5 +1,6 @@
 ﻿using Elympic_Games.Web.Data.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -32,6 +33,14 @@ namespace Elympic_Games.Web.Models.Events
 
         [Required]
         public int ArenaId { get; set; }
+
+
+        [ValidateNever]
+        public int AvailableSeats { get; set; }
+
+
+        [ValidateNever]
+        public int AvailableAccessibleSeats { get; set; }
 
 
         [BindNever]

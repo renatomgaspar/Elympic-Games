@@ -33,12 +33,27 @@ namespace Elympic_Games.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ticketOrderDetails = await _ticketOrderRepository.GetTicketOrderDetails(id.Value);
+            if (ticketOrderDetails == null)
+            {
+                return NotFound();
+            }
+
+            return View(ticketOrderDetails);
+        }
+
         [Authorize]
         public IActionResult AddTicket()
         {
             var model = new AddItemViewModel
             {
-                Quantity = 1,
                 Tickets = _ticketRepository.GetTicketsInEvent()
             };
 
@@ -58,6 +73,19 @@ namespace Elympic_Games.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> ConfirmOrder()
+        {
+            var response = await _ticketOrderRepository.ConfirmOrderAsync(this.User.Identity.Name);
+
+            if (response.Success)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError(string.Empty, response.Message);
+            return RedirectToAction("Cart");
         }
 
         public async Task<IActionResult> DeleteItem(int? id)

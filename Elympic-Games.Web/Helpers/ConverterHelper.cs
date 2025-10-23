@@ -220,7 +220,9 @@ namespace Elympic_Games.Web.Helpers
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 GameTypeId = model.GameTypeId,
-                ArenaId = model.ArenaId
+                ArenaId = model.ArenaId,
+                AvailableSeats = model.AvailableSeats,
+                AvailableAccessibleSeats = model.AvailableAccessibleSeats
             };
         }
 
@@ -233,7 +235,9 @@ namespace Elympic_Games.Web.Helpers
                 StartDate = eventObj.StartDate,
                 EndDate = eventObj.EndDate,
                 GameTypeId = eventObj.GameTypeId,
-                ArenaId = eventObj.ArenaId
+                ArenaId = eventObj.ArenaId,
+                AvailableSeats = eventObj.AvailableSeats,
+                AvailableAccessibleSeats = eventObj.AvailableAccessibleSeats
             };
         }
 

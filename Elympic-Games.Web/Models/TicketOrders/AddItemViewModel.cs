@@ -12,10 +12,6 @@ namespace Elympic_Games.Web.Models.TicketOrders
         public int TicketId { get; set; }
 
 
-        [Range(1, int.MaxValue, ErrorMessage = "The quantity must be a positive number.")]
-        public int Quantity { get; set; }
-
-
         [ValidateNever]
         public IEnumerable<SelectListItem> Tickets { get; set; }
     }

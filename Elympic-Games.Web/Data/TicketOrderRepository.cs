@@ -2,6 +2,7 @@
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.TicketOrders;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Sockets;
 
 namespace Elympic_Games.Web.Data
 {
@@ -31,6 +32,7 @@ namespace Elympic_Games.Web.Data
                 if (await _userHelper.IsUserInRoleAsync(user, "Admin"))
                 {
                     return _context.TicketOrders
+                        .Include(o => o.User)
                         .Include(o => o.Items)
                         .ThenInclude(p => p.Ticket)
                         .ThenInclude(t => t.Event)
@@ -65,28 +67,14 @@ namespace Elympic_Games.Web.Data
                 return;
             }
 
-            var cart = await _context.Carts
-                .Where(c => c.User == user && c.Ticket == ticket)
-                .FirstOrDefaultAsync();
-
-            if (cart == null)
+            var cart = new Cart
             {
-                cart = new Cart
-                {
-                    Price = ticket.Price,
-                    Ticket = ticket,
-                    Quantity = model.Quantity,
-                    User = user
-                };
+                Price = ticket.Price,
+                Ticket = ticket,
+                UserId = user.Id
+            };
 
-                _context.Carts.Add(cart);
-            }
-            else
-            {
-                cart.Quantity += model.Quantity;
-
-                _context.Carts.Update(cart);
-            }
+            _context.Carts.Add(cart);
 
             await _context.SaveChangesAsync();
         }
@@ -107,6 +95,105 @@ namespace Elympic_Games.Web.Data
                         .Where(o => o.User == user)
                         .OrderBy(o => o.Ticket.Event.Name)
                         .ThenBy(o => o.Ticket.Event.GameType.Name);
+        }
+
+        public async Task<IQueryable<TicketOrderDetail>> GetTicketOrderDetails(int id)
+        {
+            return _context.TicketOrderDetails
+                        .Include(p => p.Ticket)
+                        .ThenInclude(t => t.Event)
+                        .ThenInclude(e => e.GameType)
+                        .Where(tod => tod.TicketOrderId == id)
+                        .OrderBy(o => o.Ticket.Event.Name)
+                        .ThenBy(o => o.Ticket.Event.GameType.Name);
+        }
+
+        public async Task<TicketOrderResult> ConfirmOrderAsync(string userName)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(userName);
+
+            if (user == null)
+            {
+                return new TicketOrderResult
+                {
+                    Success = false,
+                    Message = "User Not Found"
+                };
+            }
+
+            var cart = await _context.Carts
+                .Include(o => o.Ticket)
+                .ThenInclude(t => t.Event)
+                .ThenInclude(t => t.GameType)
+                .Where(o => o.User == user)
+                .ToListAsync();
+
+            if (cart == null || cart.Count == 0)
+            {
+                return new TicketOrderResult
+                {
+                    Success = false,
+                    Message = "Cart is Empty"
+                };
+            }
+
+            foreach (var item in cart)
+            {
+                var eventObj = item.Ticket.Event;
+
+                if (item.Ticket.TicketType == "Normal")
+                {
+                    if (eventObj.AvailableSeats <= 0)
+                    {
+                        return new TicketOrderResult
+                        {
+                            Success = false,
+                            FailedEvent = eventObj,
+                            Message = $"The Event '{eventObj.Name} + {eventObj.GameType.Name}' dont have more available seats."
+                        };
+                    }
+
+                    eventObj.AvailableSeats--;
+                }
+                else if (item.Ticket.TicketType == "Accessible")
+                {
+                    if (eventObj.AvailableAccessibleSeats <= 0)
+                    {
+                        return new TicketOrderResult
+                        {
+                            Success = false,
+                            FailedEvent = eventObj,
+                            Message = $"The Event '{eventObj.Name} + {eventObj.GameType.Name}' dont have more accessible seats."
+                        };
+                    }
+
+                    eventObj.AvailableAccessibleSeats--;
+                }
+
+                _context.Events.Update(eventObj);
+            }
+
+            var details = cart.Select(o => new TicketOrderDetail
+            {
+                Price = o.Price,
+                Ticket = o.Ticket,
+            }).ToList();
+
+            var order = new TicketOrder
+            {
+                OrderDate = DateTime.UtcNow,
+                User = user,
+                Items = details
+            };
+
+            await CreateAsync(order);
+            _context.Carts.RemoveRange(cart);
+            await _context.SaveChangesAsync();
+            return new TicketOrderResult
+            {
+                Success = true,
+                Message = "Purchased"
+            };
         }
 
         public async Task DeleteTicketFromCartAsync(int id)
