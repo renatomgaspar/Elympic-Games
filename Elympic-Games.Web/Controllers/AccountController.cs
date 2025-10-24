@@ -11,16 +11,19 @@ namespace Elympic_Games.Web.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IEncryptHelper _encryptHelper;
 
         public AccountController(
             IUserHelper userHelper,
             IBlobHelper blobHelper,
-            IConverterHelper converterHelper
+            IConverterHelper converterHelper,
+            IEncryptHelper encryptHelper
             )
         {
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+            _encryptHelper = encryptHelper;
         }
 
         [Authorize(Roles = "Admin")]
@@ -220,7 +223,9 @@ namespace Elympic_Games.Web.Controllers
 
         public async Task<IActionResult> Activate(string id)
         {
-            var user = await _userHelper.GetUserById(id);
+            string decryptedId = _encryptHelper.DecryptString(id);
+
+            var user = await _userHelper.GetUserById(decryptedId);
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "User not found!");

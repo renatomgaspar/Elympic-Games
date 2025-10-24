@@ -49,6 +49,7 @@ builder.Services.AddScoped<IClassificationRepository, ClassificationRepository>(
 builder.Services.AddScoped<ITicketOrderRepository, TicketOrderRepository>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IConverterHelper, ConverterHelper>();
+builder.Services.AddScoped<IEncryptHelper, EncryptHelper>();
 
 builder.Services.AddControllersWithViews();
 

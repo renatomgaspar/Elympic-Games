@@ -13,15 +13,18 @@ namespace Elympic_Games.Web.Helpers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEncryptHelper _encryptHelper;
 
         public UserHelper(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IEncryptHelper encryptHelper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _encryptHelper = encryptHelper;
         }
 
         public async Task<List<User>> GetAllAsync()
@@ -50,7 +53,7 @@ namespace Elympic_Games.Web.Helpers
             email.Subject = "Account Activation";
 
             email.IsBodyHtml = true;
-            email.Body = $"Click to make your account Active <a href='https://localhost:44387/Account/Activate/?id={user.Id}'>> HERE <</a>";
+            email.Body = $"Click to make your account Active <a href='https://localhost:44387/Account/Activate/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
 
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;
