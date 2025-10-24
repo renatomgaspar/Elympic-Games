@@ -14,7 +14,7 @@ namespace Elympic_Games.Web.Helpers
 
         Task<User> GetUserByEmailAsync(string email);
 
-        Task<IdentityResult> AddUserAsync(User user, string password);
+        Task<IdentityResult> AddUserAsync(User user, string password, bool isVerified);
 
         Task AddUserToRoleAsync(User user, string roleName);
 

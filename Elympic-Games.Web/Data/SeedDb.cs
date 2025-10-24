@@ -42,7 +42,7 @@ namespace Elympic_Games.Web.Data
                     ImageId = Guid.Empty
                 };
 
-                var result = await _userHelper.AddUserAsync(user, "123456");
+                var result = await _userHelper.AddUserAsync(user, "123456", true);
                 if (result != IdentityResult.Success)
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");

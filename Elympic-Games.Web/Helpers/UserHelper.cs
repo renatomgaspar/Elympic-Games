@@ -3,6 +3,8 @@ using Elympic_Games.Web.Models.Accounts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Net.Mail;
 
 namespace Elympic_Games.Web.Helpers
 {
@@ -37,9 +39,35 @@ namespace Elympic_Games.Web.Helpers
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<IdentityResult> AddUserAsync(User user, string password)
+        public async Task<IdentityResult> AddUserAsync(User user, string password, bool isVerified)
         {
-            return await _userManager.CreateAsync(user, password);
+            MailMessage email = new MailMessage();
+            SmtpClient smtp = new SmtpClient();
+
+            email.From = new MailAddress("schoolmanagerpws@gmail.com");
+            email.To.Add(user.Email);
+
+            email.Subject = "Account Activation";
+
+            email.IsBodyHtml = true;
+            email.Body = $"Click to make your account Active <a href='https://localhost:44387/Account/Activate/?id={user.Id}'>> HERE <</a>";
+
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.Credentials = new NetworkCredential("schoolmanagerpws@gmail.com", "lzqf lrqa jywi agkj");
+            smtp.EnableSsl = true;
+            smtp.Send(email);
+
+            if (isVerified)
+            {
+                user.EmailConfirmed = true;
+                return await _userManager.CreateAsync(user, password);
+            }
+            else
+            {
+                user.EmailConfirmed = false;
+                return await _userManager.CreateAsync(user, password);
+            }
         }
 
         public async Task AddUserToRoleAsync(User user, string roleName)
@@ -49,6 +77,18 @@ namespace Elympic_Games.Web.Helpers
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                return SignInResult.Failed;
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return SignInResult.NotAllowed;
+            }
+
             return await _signInManager.PasswordSignInAsync(
                 model.Email,
                 model.Password,

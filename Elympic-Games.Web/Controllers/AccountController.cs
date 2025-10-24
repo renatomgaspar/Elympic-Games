@@ -146,6 +146,10 @@ namespace Elympic_Games.Web.Controllers
 
                     return this.RedirectToAction("Index", "Home");
                 }
+                else if (result.IsNotAllowed)
+                {
+                    this.ModelState.AddModelError(string.Empty, "You must verify your account first");
+                }
             }
 
             this.ModelState.AddModelError(string.Empty, "Failed to Login");
@@ -192,7 +196,7 @@ namespace Elympic_Games.Web.Controllers
 
                     user = _converterHelper.ToUser(model, imageId, true);
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
+                    var result = await _userHelper.AddUserAsync(user, model.Password, false);
                     if (!result.Succeeded)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
@@ -212,6 +216,36 @@ namespace Elympic_Games.Web.Controllers
 
             model.Roles = _userHelper.GetComboRoles();
             return View(model);
+        }
+
+        public async Task<IActionResult> Activate(string id)
+        {
+            var user = await _userHelper.GetUserById(id);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "User not found!");
+                return View();
+            }
+
+            if (user.EmailConfirmed)
+            {
+                ModelState.AddModelError(string.Empty, "User is already verified!");
+                return View();
+            }
+
+            user.EmailConfirmed = true;
+            var result = await _userHelper.UpdateUserAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "User is Activated!";
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Was not possible to activate your account!");
+            }
+
+            return View();
         }
 
         public async Task<IActionResult> ChangeUser()
