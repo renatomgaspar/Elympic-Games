@@ -1,7 +1,9 @@
-﻿using Elympic_Games.Web.Data.Entities;
+﻿using Azure;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.TicketOrders;
 using Microsoft.EntityFrameworkCore;
+using Stripe.Checkout;
 using System.Net.Sockets;
 
 namespace Elympic_Games.Web.Data
@@ -109,6 +111,115 @@ namespace Elympic_Games.Web.Data
         }
 
         public async Task<TicketOrderResult> ConfirmOrderAsync(string userName)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(userName);
+
+            if (user == null)
+            {
+                return new TicketOrderResult
+                {
+                    Success = false,
+                    Message = "User Not Found"
+                };
+            }
+
+            var cart = await _context.Carts
+                .Include(o => o.Ticket)
+                .ThenInclude(t => t.Event)
+                .ThenInclude(t => t.GameType)
+                .Where(o => o.User == user)
+                .ToListAsync();
+
+            if (cart == null || cart.Count == 0)
+            {
+                return new TicketOrderResult
+                {
+                    Success = false,
+                    Message = "Cart is Empty"
+                };
+            }
+
+            foreach (var item in cart)
+            {
+                var eventObj = item.Ticket.Event;
+
+                if (item.Ticket.TicketType == "Normal")
+                {
+                    if (eventObj.AvailableSeats <= 0)
+                    {
+                        return new TicketOrderResult
+                        {
+                            Success = false,
+                            FailedEvent = eventObj,
+                            Message = $"The Event '{eventObj.Name} + {eventObj.GameType.Name}' dont have more available seats."
+                        };
+                    }
+
+                }
+                else if (item.Ticket.TicketType == "Accessible")
+                {
+                    if (eventObj.AvailableAccessibleSeats <= 0)
+                    {
+                        return new TicketOrderResult
+                        {
+                            Success = false,
+                            FailedEvent = eventObj,
+                            Message = $"The Event '{eventObj.Name} + {eventObj.GameType.Name}' dont have more accessible seats."
+                        };
+                    }
+                }
+
+                _context.Events.Update(eventObj);
+            }
+
+            var details = cart.Select(o => new TicketOrderDetail
+            {
+                Price = o.Price,
+                Ticket = o.Ticket,
+            }).ToList();
+
+            var domain = "https://localhost:44387/";
+
+            var options = new SessionCreateOptions
+            {
+                SuccessUrl = domain + $"TicketOrders/FinishOrder",
+                CancelUrl = domain + $"TicketOrders/Cart",
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                CustomerEmail = userName
+            };
+
+            foreach (var item in details)
+            {
+                var sessionListItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(item.Price * 100),
+                        Currency = "eur",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = "Ticket " + item.Ticket.Event.Name + " - " + item.Ticket.Event.GameType.Name 
+                        }
+                    },
+                    Quantity = 1
+                };
+
+                options.LineItems.Add(sessionListItem);
+            }
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            return new TicketOrderResult
+            {
+                Success = true,
+                Message = session.Id,
+                StripeUrl = session.Url
+            };
+        }
+
+        public async Task<TicketOrderResult> FinishOrder(string userName)
         {
             var user = await _userHelper.GetUserByEmailAsync(userName);
 

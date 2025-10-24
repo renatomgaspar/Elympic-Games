@@ -1,8 +1,8 @@
 ﻿using Elympic_Games.Web.Data;
-using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.TicketOrders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.Checkout;
 
 namespace Elympic_Games.Web.Controllers
 {
@@ -81,11 +81,36 @@ namespace Elympic_Games.Web.Controllers
 
             if (response.Success)
             {
-                return RedirectToAction("Index");
+                TempData["Session"] = response.Message;
+                return Redirect(response.StripeUrl);
             }
 
             ModelState.AddModelError(string.Empty, response.Message);
             return RedirectToAction("Cart");
+        }
+
+        public async Task<IActionResult> FinishOrder()
+        {
+            var service = new SessionService();
+            Session session = service.Get(TempData["Session"].ToString());
+
+            if (session.PaymentStatus == "paid")
+            {
+                var response = await _ticketOrderRepository.FinishOrder(this.User.Identity.Name);
+
+                if (response.Success)
+                {
+                    return Redirect("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, response.Message);
+                    return Redirect("Cart");
+                }
+                
+            }
+
+            return Redirect("Cart");
         }
 
         public async Task<IActionResult> DeleteItem(int? id)

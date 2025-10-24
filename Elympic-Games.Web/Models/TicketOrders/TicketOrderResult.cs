@@ -9,5 +9,7 @@ namespace Elympic_Games.Web.Models.TicketOrders
         public string? Message { get; set; }
 
         public Event? FailedEvent { get; set; }
+
+        public string StripeUrl { get; set; }
     }
 }
