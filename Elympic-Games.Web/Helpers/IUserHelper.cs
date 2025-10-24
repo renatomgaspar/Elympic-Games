@@ -24,9 +24,15 @@ namespace Elympic_Games.Web.Helpers
 
         Task<IdentityResult> UpdateUserAsync(User user);
 
+        Task<IdentityResult> AddPasswordAsync(User user, string password);
+
+        Task<IdentityResult> RemovePasswordAsync(User user);
+
         Task<IdentityResult> DeleteUserAsync(string id);
 
         Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
+
+        Task<bool> SendEmailToRecoryPassword(User user);
 
         Task CheckRoleAsync(string roleName);
 

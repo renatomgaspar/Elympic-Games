@@ -12,7 +12,7 @@ namespace Elympic_Games.Web.Helpers
             _passphrase = configuration["ElympicGamesAppKey"];
 
             if (string.IsNullOrWhiteSpace(_passphrase))
-                throw new InvalidOperationException("A chave 'ElympicGamesAppKey' não foi encontrada nas configurações ou nos User Secrets.");
+                throw new InvalidOperationException("The key 'ElympicGamesAppKey' was not found in the configuration or in the User Secrets.");
         }
 
         public string EncryptString(string message)

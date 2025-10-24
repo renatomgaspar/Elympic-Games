@@ -123,6 +123,16 @@ namespace Elympic_Games.Web.Helpers
             return await _userManager.UpdateAsync(existingUser);
         }
 
+        public async Task<IdentityResult> AddPasswordAsync(User user, string password)
+        {
+            return await _userManager.AddPasswordAsync(user, password);
+        }
+
+        public async Task<IdentityResult> RemovePasswordAsync(User user)
+        {
+            return await _userManager.RemovePasswordAsync(user);
+        }
+
         public async Task<IdentityResult> DeleteUserAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -136,6 +146,28 @@ namespace Elympic_Games.Web.Helpers
             string newPassword)
         {
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        }
+
+        public async Task<bool> SendEmailToRecoryPassword(User user)
+        {
+            MailMessage email = new MailMessage();
+            SmtpClient smtp = new SmtpClient();
+
+            email.From = new MailAddress("schoolmanagerpws@gmail.com");
+            email.To.Add(user.Email);
+
+            email.Subject = "Recovery Password";
+
+            email.IsBodyHtml = true;
+            email.Body = $"Click to change your old password and recover your account <a href='https://localhost:44387/Account/RecoveryPassword/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
+
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.Credentials = new NetworkCredential("schoolmanagerpws@gmail.com", "lzqf lrqa jywi agkj");
+            smtp.EnableSsl = true;
+            smtp.Send(email);
+
+            return true;
         }
 
         public async Task CheckRoleAsync(string roleName)
