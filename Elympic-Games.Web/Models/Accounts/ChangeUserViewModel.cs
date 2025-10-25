@@ -14,6 +14,9 @@ namespace Elympic_Games.Web.Models.Accounts
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Required]
+        [Display(Name = "Two Factor Enable")]
+        public bool TwoFactor { get; set; }
 
         public Guid? ImageId { get; set; }
 

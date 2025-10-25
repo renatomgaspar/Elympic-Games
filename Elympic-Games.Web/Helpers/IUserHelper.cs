@@ -20,6 +20,8 @@ namespace Elympic_Games.Web.Helpers
 
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
+        Task<SignInResult> TwoFactorLoginAsync(string code);
+
         Task LogoutAsync();
 
         Task<IdentityResult> UpdateUserAsync(User user);
