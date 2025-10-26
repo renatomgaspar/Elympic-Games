@@ -4,21 +4,31 @@ using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.TicketOrders;
 using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Elympic_Games.Web.Data
 {
     public class TicketOrderRepository : GenericRepository<TicketOrder>, ITicketOrderRepository
     {
         private readonly DataContext _context;
+        private readonly IQrCodeHelper _qrCodeHelper;
         private readonly IUserHelper _userHelper;
+        private readonly IEncryptHelper _encryptHelper;
 
         public TicketOrderRepository(
-            DataContext context, 
-            IUserHelper userHelper) : base(context)
+            DataContext context,
+            IQrCodeHelper qrCodeHelper,
+            IUserHelper userHelper,
+            IEncryptHelper encryptHelper) : base(context)
         {
             _context = context;
+            _qrCodeHelper = qrCodeHelper;
             _userHelper = userHelper;
+            _encryptHelper = encryptHelper;
         }
 
         public async Task<IQueryable<TicketOrder>> GetTicketOrderAsync(string userName)
@@ -296,6 +306,61 @@ namespace Elympic_Games.Web.Data
                 User = user,
                 Items = details
             };
+
+            MailMessage email = new MailMessage();
+            email.From = new MailAddress("schoolmanagerpws@gmail.com");
+            email.To.Add(user.Email);
+            email.Subject = "Order Confirmation";
+            email.IsBodyHtml = true;
+
+            var bodyBuilder = new StringBuilder();
+            bodyBuilder.AppendLine($"<h1>Your Tickets From Your Order - {DateTime.Now}</h1>");
+
+            List<LinkedResource> linkedResources = new List<LinkedResource>();
+
+            foreach (var detail in cart)
+            {
+                var qrcodeImage = await _qrCodeHelper.GenerateQrAsync(_encryptHelper.EncryptString(detail.Id.ToString()));
+                var ms = new MemoryStream(qrcodeImage);
+                ms.Position = 0; 
+
+                var qrResource = new LinkedResource(ms, MediaTypeNames.Image.Jpeg)
+                {
+                    ContentId = Guid.NewGuid().ToString(),
+                    TransferEncoding = System.Net.Mime.TransferEncoding.Base64
+                };
+
+                linkedResources.Add(qrResource);
+
+                bodyBuilder.AppendLine($@"
+                    <h2>Event: {detail.Ticket.Event.Name}</h2>
+                    Game: {detail.Ticket.Event.GameType.Name}<br>
+                    Start Date: {detail.Ticket.Event.StartDate}<br>
+                    End Date: {detail.Ticket.Event.EndDate}<br>
+                    Seat Type: {detail.Ticket.TicketType}<br>
+                    Code to Enter: <br>
+                    <img src='cid:{qrResource.ContentId}' style='width:150px;height:150px;' /><br><br>");
+            }
+
+            bodyBuilder.AppendLine("<br>---------------------------------------------------------<br><h1><b>WARNING: DO NOT LOSE THIS EMAIL</b></h1>");
+
+            var htmlView = AlternateView.CreateAlternateViewFromString(bodyBuilder.ToString(), null, MediaTypeNames.Text.Html);
+
+            foreach (var lr in linkedResources)
+            {
+                htmlView.LinkedResources.Add(lr);
+            }
+
+            email.AlternateViews.Add(htmlView);
+
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential("schoolmanagerpws@gmail.com", "lzqf lrqa jywi agkj"),
+                EnableSsl = true
+            };
+            smtp.Send(email);
+
+
 
             await CreateAsync(order);
             _context.Carts.RemoveRange(cart);
