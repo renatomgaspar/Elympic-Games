@@ -1,8 +1,6 @@
 ﻿using Elympic_Games.Web.Data;
-using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Countries;
-using Elympic_Games.Web.Models.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,9 +23,9 @@ namespace Elympic_Games.Web.Controllers
             _converterHelper = converterHelper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _countryRepository.GetAllCountriesWithMatches());
         }
 
         [Authorize]
@@ -112,7 +110,7 @@ namespace Elympic_Games.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Code = model.Code.ToUpper();  
+                model.Code = model.Code.ToUpper();
 
                 try
                 {

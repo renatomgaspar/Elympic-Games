@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Elympic_Games.Web.Models.Countries.ShowCountryViewModel>
+
+@{
+    ViewData["Title"] = "Countries Playing";
+}
+
+<div class="container my-4">
+    <h2 class="mb-4">Countries Playing</h2>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var country in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@Url.Content(country.CountryImage)" class="card-img-top" alt="@country.CountryName" />
+
+                    <div class="card-body">
+                        <h5 class="card-title">@country.CountryName</h5>
+                        <p class="card-text">
+                            <b>Games:</b> @string.Join(", ", country.Games)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
