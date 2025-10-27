@@ -60,7 +60,17 @@ namespace Elympic_Games.Web.Helpers
                              .Replace("JOJOJO", "/")
                              .Replace("IOIOIO", "\\");
 
-            byte[] dataToDecrypt = Convert.FromBase64String(message);
+            byte[] dataToDecrypt;
+
+            try
+            {
+                dataToDecrypt = Convert.FromBase64String(message);
+            }
+            catch (Exception)
+            {
+                return "000000";
+            }
+            
 
             using var decryptor = tripleDes.CreateDecryptor();
             byte[] results = decryptor.TransformFinalBlock(dataToDecrypt, 0, dataToDecrypt.Length);

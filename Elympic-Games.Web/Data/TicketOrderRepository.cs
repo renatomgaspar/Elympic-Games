@@ -17,6 +17,7 @@ namespace Elympic_Games.Web.Data
         private readonly DataContext _context;
         private readonly IPdfGeneratorHelper _pdfGeneratorHelper;
         private readonly IUserHelper _userHelper;
+        private readonly IEncryptHelper _encryptHelper;
 
         public TicketOrderRepository(
             DataContext context,
@@ -28,6 +29,7 @@ namespace Elympic_Games.Web.Data
             _context = context;
             _pdfGeneratorHelper = pdfGeneratorHelper;
             _userHelper = userHelper;
+            _encryptHelper = encryptHelper;
         }
 
         public async Task<IQueryable<TicketOrder>> GetTicketOrderAsync(string userName)
@@ -352,6 +354,19 @@ namespace Elympic_Games.Web.Data
                 Success = true,
                 Message = "Purchased"
             };
+        }
+
+        public async Task<int> CheckTicket(string ticketId, int eventId)
+        {
+            var ticket = await _context.TicketOrderDetails
+                .FirstOrDefaultAsync(t => t.TicketId == Convert.ToInt64(_encryptHelper.DecryptString(ticketId)) && t.Ticket.EventId == eventId);
+
+            if (ticket == null)
+            {
+                return 0;
+            }
+
+            return 1;
         }
 
         public async Task DeleteTicketFromCartAsync(int id)
