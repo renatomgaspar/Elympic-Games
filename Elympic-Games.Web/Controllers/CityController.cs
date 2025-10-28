@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Cities;
 using Elympic_Games.Web.Models.Players;
@@ -168,6 +169,18 @@ namespace Elympic_Games.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var city = await _cityRepository.GetByIdAsync(id);
+
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            if (await _cityRepository.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{city.Name} can not be deleted!";
+                ViewBag.ErrorMessage = $"The City already has Arenas!";
+                return View("Error");
+            }
 
             await _cityRepository.DeleteAsync(city);
             return RedirectToAction(nameof(Manage));

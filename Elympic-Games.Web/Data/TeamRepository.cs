@@ -110,5 +110,11 @@ namespace Elympic_Games.Web.Data
 
             return list;
         }
+
+        public async Task<bool> HasDependenciesAsync(int id)
+        {
+            return await _context.Matches.AnyAsync(s => s.TeamOne.Id == id || s.TeamTwo.Id == id)
+                || await _context.Classifications.AnyAsync(s => s.Team.Id == id);
+        }
     }
 }

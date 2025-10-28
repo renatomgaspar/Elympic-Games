@@ -1,4 +1,5 @@
-﻿using Elympic_Games.Web.Data.Entities;
+﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Models.Accounts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -11,17 +12,20 @@ namespace Elympic_Games.Web.Helpers
 {
     public class UserHelper : IUserHelper
     {
+        private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEncryptHelper _encryptHelper;
 
         public UserHelper(
+            DataContext context,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             RoleManager<IdentityRole> roleManager,
             IEncryptHelper encryptHelper)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -268,6 +272,15 @@ namespace Elympic_Games.Web.Helpers
             });
 
             return list;
+        }
+
+        public async Task<bool> HasDependenciesAsync(string id)
+        {
+            return await _context.Products.AnyAsync(s => s.User.Id == id)
+                || await _context.Orders.AnyAsync(a => a.User.Id == id)
+                || await _context.TicketOrders.AnyAsync(a => a.User.Id == id)
+                || await _context.Carts.AnyAsync(adt => adt.User.Id == id)
+                || await _context.Teams.AnyAsync(adt => adt.TeamManager.Id == id);
         }
     }
 }

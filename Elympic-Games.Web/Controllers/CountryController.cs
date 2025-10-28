@@ -1,4 +1,6 @@
-﻿using Elympic_Games.Web.Data;
+﻿using AspNetCoreGeneratedDocument;
+using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Countries;
 using Microsoft.AspNetCore.Authorization;
@@ -173,6 +175,18 @@ namespace Elympic_Games.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var country = await _countryRepository.GetByIdAsync(id);
+
+            if (country == null)
+            {
+                return NotFound();
+            }
+
+            if (await _countryRepository.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{country.Name} can not be deleted!";
+                ViewBag.ErrorMessage = $"The Country has already Teams or Cities!";
+                return View("Error");
+            }
 
             if (country.ImageId != Guid.Empty)
             {

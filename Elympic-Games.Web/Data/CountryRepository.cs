@@ -37,5 +37,11 @@ namespace Elympic_Games.Web.Data
         {
             return _context.Countries.AsNoTracking().FirstOrDefault(c => c.Code == code);
         }
+
+        public async Task<bool> HasDependenciesAsync(int id)
+        {
+            return await _context.Cities.AnyAsync(s => s.Country.Id == id)
+                || await _context.Teams.AnyAsync(s => s.Country.Id == id);
+        }
     }
 }

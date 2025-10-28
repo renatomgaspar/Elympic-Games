@@ -12,5 +12,7 @@ namespace Elympic_Games.Web.Data
         Task<bool> TeamManagerExistsInDifferentCountry(Team team, bool isNew);
 
         Task<IEnumerable<SelectListItem>> GetComboItems(string table);
+
+        Task<bool> HasDependenciesAsync(int id);
     }
 }

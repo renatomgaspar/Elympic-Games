@@ -222,7 +222,19 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var eventObj = await _eventRepository.GetByIdAsync(id);
+            var eventObj = await _eventRepository.GetEventAsync(id);
+
+            if (eventObj == null)
+            {
+                return NotFound();
+            }
+
+            if (await _eventRepository.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{eventObj.Name} - {eventObj.GameType.Name} can not be deleted!";
+                ViewBag.ErrorMessage = $"The Event has already Matches, Classifications or Tickets!";
+                return View("Error");
+            }
 
             await _eventRepository.DeleteAsync(eventObj);
             return RedirectToAction(nameof(Manage));

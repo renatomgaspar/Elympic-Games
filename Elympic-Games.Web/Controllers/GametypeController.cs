@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Countries;
 using Elympic_Games.Web.Models.Gametypes;
@@ -170,6 +171,18 @@ namespace Elympic_Games.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var gameType = await _gametypeRepository.GetByIdAsync(id); ;
+
+            if (gameType == null)
+            {
+                return NotFound();
+            }
+
+            if (await _gametypeRepository.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{gameType.Name} can not be deleted!";
+                ViewBag.ErrorMessage = $"The Game has already Events or Teams!";
+                return View("Error");
+            }
 
             if (gameType.ImageId != Guid.Empty)
             {

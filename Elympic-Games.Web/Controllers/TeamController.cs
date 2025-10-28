@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Teams;
 using Microsoft.AspNetCore.Authorization;
@@ -182,7 +183,19 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var team = await _teamRepository.GetByIdAsync(id);
+            var team = await _teamRepository.GetTeamAsync(id);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            if (await _teamRepository.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{team.Name} - {team.GameType.Name} can not be deleted!";
+                ViewBag.ErrorMessage = $"The Arena has already Events!";
+                return View("Error");
+            }
 
             await _teamRepository.DeleteAsync(team);
             return RedirectToAction(nameof(Manage));

@@ -107,5 +107,12 @@ namespace Elympic_Games.Web.Data
 
             return list;
         }
+
+        public async Task<bool> HasDependenciesAsync(int id)
+        {
+            return await _context.Classifications.AnyAsync(s => s.Event.Id == id)
+                || await _context.Matches.AnyAsync(s => s.Event.Id == id)
+                || await _context.Tickets.AnyAsync(s => s.Event.Id == id);
+        }
     }
 }

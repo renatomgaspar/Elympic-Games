@@ -12,5 +12,7 @@ namespace Elympic_Games.Web.Data
         Task<IEnumerable<SelectListItem>> GetComboEvents();
 
         IEnumerable<SelectListItem> GetTicketsInEvent();
+
+        Task<bool> HasDependenciesAsync(int id);
     }
 }

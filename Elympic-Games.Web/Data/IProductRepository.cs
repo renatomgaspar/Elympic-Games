@@ -5,5 +5,7 @@ namespace Elympic_Games.Web.Data
     public interface IProductRepository : IGenericRepository<Product>
     {
         public IQueryable GetAllWithUsers();
+
+        Task<bool> HasDependenciesAsync(int id);
     }
 }

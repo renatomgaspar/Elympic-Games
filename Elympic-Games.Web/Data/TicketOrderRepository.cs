@@ -190,7 +190,7 @@ namespace Elympic_Games.Web.Data
                 Ticket = o.Ticket,
             }).ToList();
 
-            var domain = "https://localhost:44387/";
+            var domain = "https://localhost:7175/";
 
             var options = new SessionCreateOptions
             {

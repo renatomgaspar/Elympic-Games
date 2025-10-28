@@ -116,6 +116,18 @@ namespace Elympic_Games.Web.Controllers
         {
             var user = await _userHelper.GetUserById(id);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (await _userHelper.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{user.UserName} can not be deleted!";
+                ViewBag.ErrorMessage = $"The User has orders, products registered or is a team manager!";
+                return View("Error");
+            }
+
             if (user.ImageId != Guid.Empty)
             {
                 await _blobHelper.DeleteBlobAsync(user.ImageId, "users");

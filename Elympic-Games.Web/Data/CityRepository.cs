@@ -55,6 +55,11 @@ namespace Elympic_Games.Web.Data
 
             return list;
         }
+
+        public async Task<bool> HasDependenciesAsync(int id)
+        {
+            return await _context.Arena.AnyAsync(s => s.City.Id == id);
+        }
     }
 }
 

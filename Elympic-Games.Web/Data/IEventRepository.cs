@@ -13,5 +13,7 @@ namespace Elympic_Games.Web.Data
         Task<int> IsEventAlreadyCreated(Event eventObj);
 
         Task<IEnumerable<SelectListItem>> GetComboItems(string table);
+
+        Task<bool> HasDependenciesAsync(int id);
     }
 }

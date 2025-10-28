@@ -8,5 +8,7 @@ namespace Elympic_Games.Web.Data
         Task<IEnumerable<ShowCountryViewModel>> GetAllCountriesWithMatches();
 
         Task<Country?> CountryExistsByCode(string code);
+
+        Task<bool> HasDependenciesAsync(int id);
     }
 }

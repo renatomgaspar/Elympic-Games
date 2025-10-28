@@ -10,5 +10,7 @@ namespace Elympic_Games.Web.Data
         Task<bool> IsArenaAlreadyCreated(Arena arena);
 
         Task<IEnumerable<SelectListItem>> GetComboCities();
+
+        Task<bool> HasDependenciesAsync(int id);
     }
 }

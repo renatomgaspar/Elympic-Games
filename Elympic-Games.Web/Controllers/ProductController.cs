@@ -169,6 +169,18 @@ namespace Elympic_Games.Web.Controllers
         {
             var product = await _productRepository.GetByIdAsync(id);
 
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            if (await _productRepository.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{product.Name} can not be deleted!";
+                ViewBag.ErrorMessage = $"The User has orders!";
+                return View("Error");
+            }
+
             if (product.ImageId != Guid.Empty)
             {
                 await _blobHelper.DeleteBlobAsync(product.ImageId, "products");

@@ -16,5 +16,11 @@ namespace Elympic_Games.Web.Data
         {
             return _context.GameTypes.AsNoTracking().FirstOrDefault(c => c.Name == name);
         }
+
+        public async Task<bool> HasDependenciesAsync(int id)
+        {
+            return await _context.Teams.AnyAsync(s => s.GameType.Id == id)
+                || await _context.Events.AnyAsync(s => s.GameType.Id == id);
+        }
     }
 }

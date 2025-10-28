@@ -10,5 +10,7 @@ namespace Elympic_Games.Web.Data
         Task<bool> IsCityAlreadyCreated(City cityd);
 
         Task<IEnumerable<SelectListItem>> GetComboCountries();
+
+        Task<bool> HasDependenciesAsync(int id);
     }
 }

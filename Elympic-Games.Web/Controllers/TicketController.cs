@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data;
+using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.Tickets;
 using Microsoft.AspNetCore.Authorization;
@@ -194,7 +195,19 @@ namespace Elympic_Games.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ticket = await _ticketRepository.GetByIdAsync(id);
+            var ticket = await _ticketRepository.GetTicketAsync(id);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            if (await _ticketRepository.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"The ticket from Event: {ticket.Event.Name} - {ticket.Event.GameType.Name} can not be deleted!";
+                ViewBag.ErrorMessage = $"The Ticket has already Events!";
+                return View("Error");
+            }
 
             await _ticketRepository.DeleteAsync(ticket);
             return RedirectToAction(nameof(Manage));
