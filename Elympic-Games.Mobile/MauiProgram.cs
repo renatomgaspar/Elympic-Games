@@ -26,8 +26,10 @@ namespace Elympic_Games.Mobile
 #endif
 
             builder.Services.AddTransient<EventService>();
+            builder.Services.AddTransient<TicketService>();
 
             builder.Services.AddTransient<EventViewModel>();
+            builder.Services.AddTransient<ScanQrCodesViewModel>();
 
             var app = builder.Build();
 

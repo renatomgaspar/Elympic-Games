@@ -1,10 +1,21 @@
+using Elympic_Games.Mobile.ViewModels;
+
 namespace Elympic_Games.Mobile.Views;
 
+[QueryProperty(nameof(EventId), "EventId")]
+[QueryProperty(nameof(Mode), "Mode")]
 public partial class ScanQrCodes : ContentPage
 {
-	public ScanQrCodes()
+    private readonly ScanQrCodesViewModel _viewModel;
+
+    public int EventId { get; set; }
+    public int Mode { get; set; }
+    
+    public ScanQrCodes(ScanQrCodesViewModel viewModel)
 	{
 		InitializeComponent();
+
+        _viewModel = viewModel;
 
         barcodeReader.Options = new ZXing.Net.Maui.BarcodeReaderOptions
         {
@@ -17,15 +28,11 @@ public partial class ScanQrCodes : ContentPage
     private void barcodeReader_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
     {
         var first = e.Results?.FirstOrDefault();
+        if (first == null) return;
 
-        if (first is null)
+        Dispatcher.DispatchAsync(() =>
         {
-            return;
-        }
-
-        Dispatcher.DispatchAsync(async () =>
-        {
-            await DisplayAlert("Barcode Detected", first.Value, "OK");
+            _viewModel.BarcodeDetectedCommand.Execute((first.Value, EventId, Mode));
         });
     }
 }

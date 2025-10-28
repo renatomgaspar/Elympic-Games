@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Elympic_Games.Mobile.Views.EventsPage"
+             xmlns:vm="clr-namespace:Elympic_Games.Mobile.ViewModels"
              Title="Events"
              BackgroundColor="#010112">
 
@@ -35,13 +36,16 @@
                                         <Label Text="{Binding StartDate, StringFormat='Start: {0:dd/MM/yyyy}'}" Style="{StaticResource TeamElementStyle}" />
                                         <Label Text="{Binding EndDate, StringFormat='End: {0:dd/MM/yyyy}'}" Style="{StaticResource TeamElementStyle}" />
                                         <Button Text="Check In" 
-                                            Command="{Binding CheckInCommand}" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EventViewModel}}, Path=CheckInCommand}" 
+                                            CommandParameter="{Binding .}"
                                             BackgroundColor="DarkGreen" 
                                             TextColor="White"
                                             Margin="0,5,0,5"
                                             CornerRadius="8" />
+
                                         <Button Text="Check Out" 
-                                            Command="{Binding CheckOutCommand}" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EventViewModel}}, Path=CheckOutCommand}"
+                                            CommandParameter="{Binding .}"
                                             BackgroundColor="DarkRed" 
                                             TextColor="White"
                                             CornerRadius="8" />

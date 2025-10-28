@@ -19,7 +19,7 @@ namespace Elympic_Games.Web.Controllers.Api
 
         [HttpGet]
         [Route("checkticket")]
-        public async Task<ActionResult<int>> CheckTicket([FromQuery] string ticketId, [FromQuery] int eventId)
+        public async Task<ActionResult<int>> CheckTicket([FromQuery] string ticketId, [FromQuery] int eventId, [FromQuery] int mode)
         {
             return Ok(await _ticketOrderRepository.CheckTicket(ticketId, eventId));
         }
