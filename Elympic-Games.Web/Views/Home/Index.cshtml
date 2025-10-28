@@ -1,8 +1,81 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Elympic Games - eSports Tickets";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    #heroCarousel {
+        max-height: 450px;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    #heroCarousel img {
+        height: 300px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .carousel-caption {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 1.5rem;
+    }
+
+</style>
+
+<div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="/images/homeWpp1.jpg" class="d-block w-100" alt="Esports Arena">
+            <div class="carousel-caption d-none d-md-block">
+                <h2 class="fw-bold text-light">Experience the Thrill of eSports</h2>
+                <p>Buy your ticket and be part of the next big tournament.</p>
+                <a href="/Event" class="btn btn-primary btn-sm px-4">Get Tickets</a>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="/images/homeWpp2.jpg" class="d-block w-100" alt="Gaming Fans">
+            <div class="carousel-caption d-none d-md-block">
+                <h2 class="fw-bold text-light">Join the Action</h2>
+                <p>Feel the energy of live gaming competitions.</p>
+                <a href="/Event" class="btn btn-outline-light btn-sm px-4">Explore Events</a>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="/images/homeWpp3.jpg" class="d-block w-100" alt="eSports Stage">
+            <div class="carousel-caption d-none d-md-block">
+                <h2 class="fw-bold text-light">Your Ticket to the Arena</h2>
+                <p>Secure your spot before it’s sold out!</p>
+                <a href="/Event" class="btn btn-primary btn-sm px-4">Buy Now</a>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
+
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Your Gateway to eSports Events</h2>
+        <p class="lead text-muted mb-4">
+            <strong>Elympic Games</strong> brings you closer to the world of competitive gaming. Discover and book tickets for top tournaments and live gaming shows around the world.
+        </p>
+        <a href="/Event" class="btn btn-primary btn-lg px-4 me-2">Explore Events</a>
+        <a href="/Account/Register" class="btn btn-outline-dark btn-lg px-4">Sign Up</a>
+    </div>
+</section>
+
+<section class="py-5 text-center bg-dark text-light">
+    <div class="container">
+        <h2 class="fw-bold mb-3">Don’t Miss Out on the Next Big Tournament!</h2>
+        <p class="lead mb-4">Limited seats available — secure your ticket today.</p>
+        <a href="/Account/Login" class="btn btn-danger btn-lg px-4">Login Now</a>
+    </div>
+</section>
