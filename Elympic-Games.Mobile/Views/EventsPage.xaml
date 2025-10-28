@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Elympic_Games.Mobile.Views.EventsPage"
+             Title="Events"
+             BackgroundColor="#010112">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="15">
+        <Image Grid.Column="1"
+           WidthRequest="300"
+           HeightRequest="150"
+           Margin="10,0,0,0"
+           Aspect="AspectFit"
+           Source="elympicgameslogo.png" />
+
+        <Label Grid.Row="1"
+            Text="Events"
+            Style="{StaticResource TitleH1}" /> 
+
+        <ScrollView Grid.Row="3">
+            <StackLayout>
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   IsVisible="{Binding IsBusy}"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center" />
+
+                <CollectionView ItemsSource="{Binding Events}" Margin="20">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource EventFrameStyle}">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding Name}" Style="{StaticResource TeamNameStyle}" />
+                                        <Label Text="{Binding GameTypeName}" Style="{StaticResource TeamCountryStyle}" />
+                                        <Label Text="{Binding StartDate, StringFormat='Start: {0:dd/MM/yyyy}'}" Style="{StaticResource TeamElementStyle}" />
+                                        <Label Text="{Binding EndDate, StringFormat='End: {0:dd/MM/yyyy}'}" Style="{StaticResource TeamElementStyle}" />
+                                        <Button Text="Check In" 
+                                            Command="{Binding CheckInCommand}" 
+                                            BackgroundColor="DarkGreen" 
+                                            TextColor="White"
+                                            Margin="0,5,0,5"
+                                            CornerRadius="8" />
+                                        <Button Text="Check Out" 
+                                            Command="{Binding CheckOutCommand}" 
+                                            BackgroundColor="DarkRed" 
+                                            TextColor="White"
+                                            CornerRadius="8" />
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

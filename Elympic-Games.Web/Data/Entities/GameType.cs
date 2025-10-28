@@ -28,7 +28,7 @@ namespace Elympic_Games.Web.Data.Entities
 
 
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:44387/images/noimage.png"
+            ? $"https://localhost:7175/images/noimage.png"
             : $"https://elympicgames.blob.core.windows.net/gametypes/{ImageId}";
     }
 }

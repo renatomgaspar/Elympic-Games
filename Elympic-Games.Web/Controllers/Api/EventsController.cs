@@ -16,9 +16,10 @@ namespace Elympic_Games.Web.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult GetEvents()
+        public async Task<IActionResult> GetEvents()
         {
-            return Ok(_eventRepository.GetAll());
+            var events = await _eventRepository.GetEvents();
+            return Ok(events);
         }
     }
 }

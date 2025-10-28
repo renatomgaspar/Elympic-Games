@@ -54,7 +54,7 @@ namespace Elympic_Games.Web.Helpers
             email.Subject = "Account Activation";
 
             email.IsBodyHtml = true;
-            email.Body = $"Click to make your account Active <a href='https://localhost:44387/Account/Activate/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
+            email.Body = $"Click to make your account Active <a href='https://localhost:7175/Account/Activate/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
 
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;
@@ -208,7 +208,7 @@ namespace Elympic_Games.Web.Helpers
             email.Subject = "Recovery Password";
 
             email.IsBodyHtml = true;
-            email.Body = $"Click to change your old password and recover your account <a href='https://localhost:44387/Account/RecoveryPassword/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
+            email.Body = $"Click to change your old password and recover your account <a href='https://localhost:7175/Account/RecoveryPassword/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
 
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;

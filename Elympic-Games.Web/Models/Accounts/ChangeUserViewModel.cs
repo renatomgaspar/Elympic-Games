@@ -26,7 +26,7 @@ namespace Elympic_Games.Web.Models.Accounts
 
 
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:44387/images/userDefaultImage.png"
+            ? $"https://localhost:7175/images/userDefaultImage.png"
             : $"https://elympicgames.blob.core.windows.net/users/{ImageId}";
     }
 }

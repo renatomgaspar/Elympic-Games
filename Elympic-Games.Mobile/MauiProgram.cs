@@ -1,10 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Elympic_Games.Mobile.Services;
+using Elympic_Games.Mobile.ViewModels;
+using Microsoft.Extensions.Logging;
 using ZXing.Net.Maui.Controls;
 
 namespace Elympic_Games.Mobile
 {
     public static class MauiProgram
     {
+        public static IServiceProvider ServiceProvider { get; private set; }
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -21,7 +25,15 @@ namespace Elympic_Games.Mobile
     		builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            builder.Services.AddTransient<EventService>();
+
+            builder.Services.AddTransient<EventViewModel>();
+
+            var app = builder.Build();
+
+            ServiceProvider = app.Services;
+
+            return app;
         }
     }
 }

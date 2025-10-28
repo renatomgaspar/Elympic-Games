@@ -1,4 +1,5 @@
 ﻿using Elympic_Games.Web.Data.Entities;
+using Elympic_Games.Web.Models.Events;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,25 @@ namespace Elympic_Games.Web.Data
         public EventRepository(DataContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<List<EventDto>> GetEvents()
+        {
+            return await _context.Events
+                .Include(e => e.GameType)
+                .Include(e => e.Arena)
+                .ThenInclude(a => a.City)
+                .ThenInclude(c => c.Country)
+                .OrderBy(e => e.StartDate)
+                .Select(e => new EventDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
+                    GameTypeName = e.GameType.Name
+                })
+                .ToListAsync();
         }
 
         public async Task<Event> GetEventAsync(int id)
