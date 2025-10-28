@@ -2,6 +2,7 @@
 using Elympic_Games.Web.Data.Entities;
 using Elympic_Games.Web.Helpers;
 using Elympic_Games.Web.Models.TicketOrders;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
 using System.Net;
@@ -356,17 +357,35 @@ namespace Elympic_Games.Web.Data
             };
         }
 
-        public async Task<int> CheckTicket(string ticketId, int eventId)
+        public async Task<int> CheckTicket(string ticketId, int eventId, int mode)
         {
             var ticket = await _context.TicketOrderDetails
-                .FirstOrDefaultAsync(t => t.TicketId == Convert.ToInt64(_encryptHelper.DecryptString(ticketId)) && t.Ticket.EventId == eventId);
+                .FirstOrDefaultAsync(t => t.TicketId == Convert.ToInt64(_encryptHelper.DecryptString(ticketId)) && t.Ticket.EventId == eventId); ;
 
             if (ticket == null)
             {
                 return 0;
             }
 
-            return 1;
+            if (mode == ticket.isCheckedIn)
+            {
+                return 2;
+            }
+            else
+            {
+                if (mode == 0)
+                {
+                    ticket.isCheckedIn = 0;
+                }
+                else
+                {
+                    ticket.isCheckedIn = 1;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return 1;
+            }            
         }
 
         public async Task DeleteTicketFromCartAsync(int id)
@@ -381,5 +400,7 @@ namespace Elympic_Games.Web.Data
             _context.Carts.Remove(cart);
             await _context.SaveChangesAsync();
         }
+
+
     }
 }

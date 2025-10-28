@@ -25,14 +25,18 @@ public partial class ScanQrCodes : ContentPage
         };
     }
 
-    private void barcodeReader_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
+    private async void barcodeReader_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
     {
         var first = e.Results?.FirstOrDefault();
         if (first == null) return;
 
-        Dispatcher.DispatchAsync(() =>
+        barcodeReader.IsDetecting = false;
+
+        await Dispatcher.DispatchAsync(async () =>
         {
-            _viewModel.BarcodeDetectedCommand.Execute((first.Value, EventId, Mode));
+            await _viewModel.ProcessQrCodeAsync(first.Value, EventId, Mode);
+
+            barcodeReader.IsDetecting = true;
         });
     }
 }

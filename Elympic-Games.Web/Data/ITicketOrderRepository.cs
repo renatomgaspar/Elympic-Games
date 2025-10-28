@@ -17,7 +17,7 @@ namespace Elympic_Games.Web.Data
 
         Task<TicketOrderResult> FinishOrder(string userName);
 
-        Task<int> CheckTicket(string ticketId, int eventId);
+        Task<int> CheckTicket(string ticketId, int eventId, int mode);
 
         Task DeleteTicketFromCartAsync(int id);
     }

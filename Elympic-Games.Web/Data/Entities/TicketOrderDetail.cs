@@ -15,8 +15,10 @@ namespace Elympic_Games.Web.Data.Entities
         public int TicketOrderId { get; set; }
 
 
-
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Price { get; set; }
+
+
+        public int isCheckedIn { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace Elympic_Games.Mobile.ViewModels
 
             LoadEventsAsync();
             CheckInCommand = new RelayCommand<Event>(e => OnNavigateToScan(e, 1));
-            CheckOutCommand = new RelayCommand<Event>(e => OnNavigateToScan(e, 2));
+            CheckOutCommand = new RelayCommand<Event>(e => OnNavigateToScan(e, 0));
         }
 
         private async void LoadEventsAsync()

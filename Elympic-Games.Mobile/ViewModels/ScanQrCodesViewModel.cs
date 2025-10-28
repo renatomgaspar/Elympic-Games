@@ -1,11 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Elympic_Games.Mobile.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Elympic_Games.Mobile.ViewModels
 {
@@ -13,21 +8,12 @@ namespace Elympic_Games.Mobile.ViewModels
     {
         private readonly TicketService _ticketService;
 
-        public ICommand BarcodeDetectedCommand { get; }
-
         public ScanQrCodesViewModel(TicketService ticketService)
         {
             _ticketService = ticketService;
-
-            // Recebe os dois parâmetros: ticketId e eventId
-            BarcodeDetectedCommand = new Command<(string ticketId, int eventId, int mode)>(async param =>
-            {
-                var (ticketId, eventId, mode) = param;
-                await ProcessQrCodeAsync(ticketId, eventId, mode);
-            });
         }
 
-        private async Task ProcessQrCodeAsync(string ticketId, int eventId, int mode)
+        public async Task ProcessQrCodeAsync(string ticketId, int eventId, int mode)
         {
             try
             {
@@ -37,24 +23,23 @@ namespace Elympic_Games.Mobile.ViewModels
                 {
                     await Application.Current.MainPage.DisplayAlert(
                         "Ticket Detected",
-                        $"Ticket is valid. The person can enter the event",
+                        $"Ticket is valid",
                         "OK");
                 }
-                if (availableTickets == 2)
+                else if (availableTickets == 2)
                 {
                     await Application.Current.MainPage.DisplayAlert(
                         "Ticket Detected",
-                        $"Ticket is valid. The person can leave the event",
+                        $"Ticket has already been scanned",
                         "OK");
                 }
                 else
                 {
                     await Application.Current.MainPage.DisplayAlert(
                         "Ticket Detected",
-                        $"Ticket is not from this event or is invalid",
+                        $"Ticket is invalid or not from this event",
                         "OK");
                 }
-                
             }
             catch (Exception ex)
             {
