@@ -10,13 +10,13 @@
     <div class="col-md-4 offset-md-4">
         <form method="post" enctype="multipart/form-data">
             <div class="form-group mb-3">
-                <label asp-for="EventId" class="form-label">Country</label>
+                <label asp-for="EventId" class="form-label">Event</label>
                 <select asp-for="EventId" asp-items="Model.Events" class="form-select"></select>
                 <span asp-validation-for="EventId" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="TicketType" class="form-label">Country</label>
+                <label asp-for="TicketType" class="form-label">Type</label>
                 <select asp-for="TicketType" asp-items="Model.TicketTypes" class="form-select"></select>
                 <span asp-validation-for="TicketType" class="text-danger"></span>
             </div>

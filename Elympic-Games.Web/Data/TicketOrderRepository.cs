@@ -309,6 +309,10 @@ namespace Elympic_Games.Web.Data
                 Items = details
             };
 
+            await CreateAsync(order);
+            _context.Carts.RemoveRange(cart);
+            await _context.SaveChangesAsync();
+
             var pdfBytes = await _pdfGeneratorHelper.FillPdflMultipleTickets(details);
 
             MailMessage email = new MailMessage();
@@ -347,9 +351,6 @@ namespace Elympic_Games.Web.Data
             email.Attachments.Add(attachment);
             smtp.Send(email);
 
-            await CreateAsync(order);
-            _context.Carts.RemoveRange(cart);
-            await _context.SaveChangesAsync();
             return new TicketOrderResult
             {
                 Success = true,
@@ -359,8 +360,10 @@ namespace Elympic_Games.Web.Data
 
         public async Task<int> CheckTicket(string ticketId, int eventId, int mode)
         {
+            var decryptedQrCode = Convert.ToInt64(_encryptHelper.DecryptString(ticketId));
+
             var ticket = await _context.TicketOrderDetails
-                .FirstOrDefaultAsync(t => t.TicketId == Convert.ToInt64(_encryptHelper.DecryptString(ticketId)) && t.Ticket.EventId == eventId); ;
+                .FirstOrDefaultAsync(t => t.Id == decryptedQrCode && t.Ticket.EventId == eventId);
 
             if (ticket == null)
             {

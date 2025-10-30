@@ -67,7 +67,7 @@ namespace Elympic_Games.Web.Helpers
                             stamper.AddAnnotation(pb.Field, page);
                         }
 
-                        byte[] qrBytes = await _qrCodeHelper.GenerateQrAsync(_encryptHelper.EncryptString(ticket.Ticket.Id.ToString()));
+                        byte[] qrBytes = await _qrCodeHelper.GenerateQrAsync(_encryptHelper.EncryptString(ticket.Id.ToString()));
                         Image qrImage = Image.GetInstance(qrBytes);
 
                         positions = form.GetFieldPositions("qrcodeImage_af_image");
@@ -76,7 +76,7 @@ namespace Elympic_Games.Web.Helpers
                             var pos = positions[0].position;
                             int page = positions[0].page;
 
-                            var pb = new PushbuttonField(stamper.Writer, pos, "gameImage_af_image")
+                            var pb = new PushbuttonField(stamper.Writer, pos, "qrcodeImage_af_image")
                             {
                                 Layout = PushbuttonField.LAYOUT_ICON_ONLY,
                                 Image = qrImage,
